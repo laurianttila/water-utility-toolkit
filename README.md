@@ -1,7 +1,9 @@
 [![CC BY 4.0][cc-by-shield]][cc-by]
 
 # Hybrid threat modeling toolkit for small utilities
-Workshop canvases designed to identify socio-technical threats at small water utilities
+Tools to identify and respond to socio-technical threats at small water utilities
+
+Work-in-progress and linked to ongoing doctoral dissertation work
 
 This work is licensed under a
 [Creative Commons Attribution 4.0 International License][cc-by].
