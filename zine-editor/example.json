@@ -38,45 +38,5 @@
     "html": "<div>Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci.</div><div>In hac habitasse platea dictumst. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.</div>",
     "align": "left",
     "size": "9"
-  },
-  "p9": {
-    "html": "<div>Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div><div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p10": {
-    "html": "<div>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</div><div>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p11": {
-    "html": "<div>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.</div><div>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p12": {
-    "html": "<div>Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</div><div>Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p13": {
-    "html": "<div>Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</div><div>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p14": {
-    "html": "<div>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</div><div>Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p15": {
-    "html": "<div>Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.</div><div>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.</div>",
-    "align": "left",
-    "size": "9"
-  },
-  "p16": {
-    "html": "<div>Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.</div><div>Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt.</div>",
-    "align": "center",
-    "size": "12"
   }
 }
