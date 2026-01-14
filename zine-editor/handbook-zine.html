@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zine Editor Pro</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --accent-color: #2c3e50;
+            --paper-white: #ffffff;
+            --border-color: #ccc;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { margin-bottom: 10px; }
+        
+        .controls {
+            margin-bottom: 20px;
+            background: var(--paper-white);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button, label.btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover, label.btn:hover { opacity: 0.9; }
+        input[type="file"] { display: none; }
+
+        /* EDITOR GRID */
+        .editor-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .page-wrapper {
+            background: var(--paper-white);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .page-header h3 {
+            margin: 0;
+            font-size: 1em;
+            color: var(--accent-color);
+        }
+
+        /* TOOLBAR STYLES */
+        .toolbar {
+            display: flex;
+            gap: 5px;
+            background: #eee;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .toolbar select, .toolbar input {
+            font-size: 12px;
+            padding: 2px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .toolbar input[type="number"] {
+            width: 40px;
+        }
+
+        /* Rich Text Box */
+        .editable-box {
+            width: 100%;
+            height: 200px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px;
+            font-family: inherit;
+            overflow-y: auto;
+            background: white;
+            box-sizing: border-box;
+            
+            /* Default styles */
+            text-align: center; 
+            font-size: 12pt;
+        }
+
+        /* TABLE STYLES */
+        table { border-collapse: collapse; width: 100%; margin: 5px 0; font-size: inherit; }
+        td, th { border: 1px solid #333; padding: 4px; }
+
+        #print-area { display: none; }
+
+        /* --- PRINT LOGIC --- */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .controls, .editor-container, h1, p {
+                display: none !important;
+            }
+
+            #print-area {
+                display: grid !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 297mm;
+                height: 210mm;
+                grid-template-columns: 25% 25% 25% 25%;
+                grid-template-rows: 50% 50%;
+            }
+
+            .zine-page {
+                border: 1px dashed #e0e0e0;
+                padding: 15px;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: center; /* Vertical alignment always center for zines usually */
+                
+                /* Text styles will be applied via JS */
+                overflow: hidden;
+                white-space: pre-wrap; 
+            }
+            
+            .zine-page table { border: 1px solid black; }
+
+            .top-row {
+                transform: rotate(180deg);
+                /* Flex column is needed to keep content flow correct when rotated */
+                display: flex; 
+            }
+            .bottom-row {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Zine Editor Pro 🛠️</h1>
+    <p>Use the toolbar above each page to set size and alignment.</p>
+
+    <div class="controls">
+        <button onclick="exportData()">Export JSON</button>
+        <label class="btn">
+            Import JSON <input type="file" id="fileInput" accept=".json" onchange="importData(this)">
+        </label>
+        <button onclick="window.print()">Print / Save PDF</button>
+        <button onclick="clearAll()" style="background-color: #c0392b;">Clear All</button>
+    </div>
+
+    <div class="editor-container">
+        <script>
+            const labels = [
+                "1 (Cover)", "2", "3", "4",
+                "5", "6", "7", "8 (Back)"
+            ];
+            
+            for(let i=1; i<=8; i++) {
+                document.write(`
+                    <div class="page-wrapper">
+                        <div class="page-header">
+                            <h3>Pg ${labels[i-1]}</h3>
+                            <div class="toolbar">
+                                <select id="align-${i}" onchange="updateStyles(${i})">
+                                    <option value="center" selected>Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                    <option value="justify">Justify</option>
+                                </select>
+                                <input type="number" id="size-${i}" value="12" min="6" max="72" onchange="updateStyles(${i})">
+                                <span style="font-size:10px; color:#666;">pt</span>
+                            </div>
+                        </div>
+                        <div id="p${i}" class="editable-box" contenteditable="true"></div>
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+
+    <div id="print-area">
+        <div class="zine-page top-row" id="print-p1"></div>
+        <div class="zine-page top-row" id="print-p8"></div>
+        <div class="zine-page top-row" id="print-p7"></div>
+        <div class="zine-page top-row" id="print-p6"></div>
+
+        <div class="zine-page bottom-row" id="print-p2"></div>
+        <div class="zine-page bottom-row" id="print-p3"></div>
+        <div class="zine-page bottom-row" id="print-p4"></div>
+        <div class="zine-page bottom-row" id="print-p5"></div>
+    </div>
+
+    <script>
+        const inputs = ['p1','p2','p3','p4','p5','p6','p7','p8'];
+
+        // Sync Content and Styles
+        function updateStyles(index) {
+            // Get inputs
+            const align = document.getElementById(`align-${index}`).value;
+            const size = document.getElementById(`size-${index}`).value;
+            
+            // Apply to Editor Box
+            const editorBox = document.getElementById(`p${index}`);
+            editorBox.style.textAlign = align;
+            editorBox.style.fontSize = size + "pt";
+
+            // Apply to Print Box
+            const printBox = document.getElementById(`print-p${index}`);
+            printBox.style.textAlign = align;
+            printBox.style.fontSize = size + "pt";
+            
+            // Sync content as well just in case
+            printBox.innerHTML = editorBox.innerHTML;
+        }
+
+        // Listen for typing (content changes)
+        inputs.forEach((id, index) => {
+            const num = index + 1;
+            document.getElementById(id).addEventListener('input', () => {
+                updateStyles(num); 
+            });
+        });
+
+        // Export JSON (Now supports styles!)
+        function exportData() {
+            const data = {};
+            inputs.forEach((id, index) => { 
+                const num = index + 1;
+                data[id] = {
+                    html: document.getElementById(id).innerHTML,
+                    align: document.getElementById(`align-${num}`).value,
+                    size: document.getElementById(`size-${num}`).value
+                };
+            });
+            const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "zine-pro.json"; a.click();
+        }
+
+        // Import JSON
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Loop through pages
+                    inputs.forEach((id, index) => {
+                        const num = index + 1;
+                        if (data[id]) {
+                            // Check if it's the new format (Object) or old (String)
+                            if (typeof data[id] === 'object') {
+                                document.getElementById(id).innerHTML = data[id].html || "";
+                                document.getElementById(`align-${num}`).value = data[id].align || "center";
+                                document.getElementById(`size-${num}`).value = data[id].size || "12";
+                            } else {
+                                // Fallback for old save files
+                                document.getElementById(id).innerHTML = data[id];
+                            }
+                            // Refresh the view
+                            updateStyles(num);
+                        }
+                    });
+                    alert("Loaded!");
+                } catch (err) { 
+                    console.error(err);
+                    alert("Error reading JSON."); 
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAll() {
+            if(confirm("Delete everything?")) {
+                inputs.forEach((id, index) => {
+                    const num = index + 1;
+                    document.getElementById(id).innerHTML = "";
+                    // Reset styles to default
+                    document.getElementById(`align-${num}`).value = "center";
+                    document.getElementById(`size-${num}`).value = "12";
+                    updateStyles(num);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

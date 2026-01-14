@@ -1,0 +1,82 @@
+{
+  "p1": {
+    "html": "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div><div>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div><div>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>",
+    "align": "center",
+    "size": "12"
+  },
+  "p2": {
+    "html": "<div>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div><div>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p3": {
+    "html": "<div>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.</div><div>Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p4": {
+    "html": "<div>Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula.</div><div>Donec lobortis risus a elit. Etiam tempor.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p5": {
+    "html": "<div>Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam.</div><div>Maecenas fermentum consequat mi. Donec fermentum.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p6": {
+    "html": "<div>Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque.</div><div>Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus eget erat.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p7": {
+    "html": "<div>Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat.</div><div>Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, nisi.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p8": {
+    "html": "<div>Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci.</div><div>In hac habitasse platea dictumst. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p9": {
+    "html": "<div>Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div><div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p10": {
+    "html": "<div>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</div><div>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p11": {
+    "html": "<div>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.</div><div>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p12": {
+    "html": "<div>Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</div><div>Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p13": {
+    "html": "<div>Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</div><div>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p14": {
+    "html": "<div>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.</div><div>Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p15": {
+    "html": "<div>Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.</div><div>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.</div>",
+    "align": "left",
+    "size": "9"
+  },
+  "p16": {
+    "html": "<div>Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.</div><div>Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt.</div>",
+    "align": "center",
+    "size": "12"
+  }
+}
