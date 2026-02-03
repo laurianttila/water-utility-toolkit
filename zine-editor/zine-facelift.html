@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handbook creator</title>
+    <style>
+        :root {
+            --geist-foreground: #000;
+            --geist-background: #fff;
+            --accents-1: #fafafa;
+            --accents-2: #eaeaea;
+            --accents-3: #999;
+            --accents-4: #888;
+            --accents-5: #666;
+            --accents-6: #444;
+            --geist-success: #0070f3;
+            --geist-error: #e00;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--accents-1);
+            color: var(--geist-foreground);
+            margin: 0;
+            padding: 0; /* Padding handled by containers */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* HEADER & CONTROLS */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            width: 100%;
+            border-bottom: 1px solid var(--accents-2);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-title p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--accents-5);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* BUTTONS (Vercel Style) */
+        button, label.btn {
+            height: 36px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+        }
+
+        /* Secondary Button (Default) */
+        button.secondary, label.btn {
+            background-color: var(--geist-background);
+            border: 1px solid var(--accents-2);
+            color: var(--geist-foreground);
+        }
+        button.secondary:hover, label.btn:hover {
+            border-color: var(--geist-foreground);
+        }
+
+        /* Primary Button (Black) */
+        button.primary {
+            background-color: var(--geist-foreground);
+            color: var(--geist-background);
+        }
+        button.primary:hover {
+            background-color: #333;
+        }
+
+        /* Danger Button (Text only usually, but let's do minimal red) */
+        button.danger {
+            background: transparent;
+            color: var(--geist-error);
+            border: 1px solid transparent;
+        }
+        button.danger:hover {
+            background: #fff0f0;
+        }
+
+        input[type="file"] { display: none; }
+
+        /* EDITOR GRID */
+        .editor-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px 24px;
+        }
+
+        .page-wrapper {
+            background: var(--geist-background);
+            padding: 0;
+            border-radius: 8px;
+            border: 1px solid var(--accents-2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .page-wrapper:hover {
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            border-color: #ccc;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--accents-2);
+            background: #fafafa;
+        }
+
+        .page-header h3 {
+            margin: 0;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--accents-5);
+            letter-spacing: 0.5px;
+        }
+
+        /* TOOLBAR INSIDE CARD */
+        .toolbar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .toolbar select, .toolbar input {
+            font-size: 12px;
+            padding: 4px 6px;
+            border: 1px solid var(--accents-2);
+            border-radius: 4px;
+            color: var(--accents-6);
+            background: white;
+            font-family: inherit;
+        }
+        
+        .toolbar select:focus, .toolbar input:focus {
+            outline: none;
+            border-color: var(--accents-5);
+        }
+
+        .toolbar input[type="number"] { width: 45px; }
+        .toolbar span { font-size: 10px; color: var(--accents-4); }
+
+        /* Rich Text Box */
+        .editable-box {
+            width: 100%;
+            height: 220px;
+            padding: 16px;
+            font-family: inherit;
+            overflow-y: auto;
+            background: white;
+            box-sizing: border-box;
+            outline: none;
+            /* Default styles */
+            text-align: center; 
+            font-size: 12pt;
+            color: #111;
+        }
+
+        /* PRINT AREA (HIDDEN) */
+        #print-area { display: none; }
+
+        /* --- PRINT LOGIC --- */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white;
+                color: black;
+            }
+
+            header, .editor-container {
+                display: none !important;
+            }
+
+            #print-area {
+                display: block !important;
+            }
+
+            .print-sheet {
+                display: grid;
+                width: 297mm;
+                height: 210mm;
+                grid-template-columns: 25% 25% 25% 25%;
+                grid-template-rows: 50% 50%;
+                page-break-after: always;
+                break-after: page;
+                overflow: hidden;
+            }
+
+            .zine-page {
+                border: 1px dashed #ccc; /* Lighter dashed line for print */
+                padding: 15px;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                overflow: hidden;
+                white-space: pre-wrap; 
+                position: relative;
+            }
+
+            /* PAGE NUMBERS */
+            .zine-page[data-page-num]::after {
+                content: attr(data-page-num);
+                position: absolute;
+                bottom: 8px;
+                right: 8px;
+                font-size: 9pt;
+                color: #666;
+                font-family: var(--font-sans);
+            }
+            
+            .zine-page table { border: 1px solid black; border-collapse: collapse; width: 100%; }
+            .zine-page td { border: 1px solid black; padding: 2px; }
+
+            .top-row { transform: rotate(180deg); display: flex; }
+            .bottom-row { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Handbook Creator</h1>
+            <p>16-page layout generator</p>
+        </div>
+        <div class="controls">
+            <button class="secondary" onclick="exportData()">Export JSON</button>
+            <label class="btn">
+                Import JSON <input type="file" id="fileInput" accept=".json" onchange="importData(this)">
+            </label>
+            <button class="secondary" onclick="window.open('zine-guide-colour.jpg')" title="View folding instructions">Guide</button>
+            <button class="danger" onclick="clearAll()">Clear</button>
+            <button class="primary" onclick="window.print()">Print</button>
+        </div>
+    </header>
+
+    <div class="editor-container">
+        <script>
+            // Defined labels for 16 pages
+            const labels = [
+                "1 (Cover A)", "2", "3", "4", "5", "6", "7", "8 (Back A)",
+                "9 (Cover B)", "10", "11", "12", "13", "14", "15", "16 (Back B)"
+            ];
+            
+            // Loop for 16 pages
+            for(let i=1; i<=16; i++) {
+                document.write(`
+                    <div class="page-wrapper">
+                        <div class="page-header">
+                            <h3>Page ${labels[i-1]}</h3>
+                            <div class="toolbar">
+                                <select id="align-${i}" onchange="updateStyles(${i})">
+                                    <option value="center" selected>Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                    <option value="justify">Justify</option>
+                                </select>
+                                <input type="number" id="size-${i}" value="12" min="6" max="72" onchange="updateStyles(${i})">
+                                <span>pt</span>
+                            </div>
+                        </div>
+                        <div id="p${i}" class="editable-box" contenteditable="true" spellcheck="false"></div>
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+
+    <div id="print-area">
+        <div class="print-sheet">
+            <div class="zine-page top-row" id="print-p1"></div>
+            <div class="zine-page top-row" id="print-p8"></div>
+            <div class="zine-page top-row" id="print-p7" data-page-num="7"></div>
+            <div class="zine-page top-row" id="print-p6" data-page-num="6"></div>
+
+            <div class="zine-page bottom-row" id="print-p2" data-page-num="2"></div>
+            <div class="zine-page bottom-row" id="print-p3" data-page-num="3"></div>
+            <div class="zine-page bottom-row" id="print-p4" data-page-num="4"></div>
+            <div class="zine-page bottom-row" id="print-p5" data-page-num="5"></div>
+        </div>
+
+        <div class="print-sheet">
+            <div class="zine-page top-row" id="print-p9"></div>
+            <div class="zine-page top-row" id="print-p16"></div>
+            <div class="zine-page top-row" id="print-p15" data-page-num="15"></div>
+            <div class="zine-page top-row" id="print-p14" data-page-num="14"></div>
+
+            <div class="zine-page bottom-row" id="print-p10" data-page-num="10"></div>
+            <div class="zine-page bottom-row" id="print-p11" data-page-num="11"></div>
+            <div class="zine-page bottom-row" id="print-p12" data-page-num="12"></div>
+            <div class="zine-page bottom-row" id="print-p13" data-page-num="13"></div>
+        </div>
+    </div>
+
+    <script>
+        // Generate inputs array for p1 to p16
+        const inputs = [];
+        for(let i=1; i<=16; i++) { inputs.push('p'+i); }
+
+        // Sync Content and Styles
+        function updateStyles(index) {
+            const align = document.getElementById(`align-${index}`).value;
+            const size = document.getElementById(`size-${index}`).value;
+            
+            const editorBox = document.getElementById(`p${index}`);
+            editorBox.style.textAlign = align;
+            editorBox.style.fontSize = size + "pt";
+
+            const printBox = document.getElementById(`print-p${index}`);
+            printBox.style.textAlign = align;
+            printBox.style.fontSize = size + "pt";
+            
+            printBox.innerHTML = editorBox.innerHTML;
+        }
+
+        inputs.forEach((id, index) => {
+            const num = index + 1;
+            document.getElementById(id).addEventListener('input', () => {
+                updateStyles(num); 
+            });
+        });
+
+        function exportData() {
+            const data = {};
+            inputs.forEach((id, index) => { 
+                const num = index + 1;
+                const el = document.getElementById(id);
+                if(el) {
+                    data[id] = {
+                        html: el.innerHTML,
+                        align: document.getElementById(`align-${num}`).value,
+                        size: document.getElementById(`size-${num}`).value
+                    };
+                }
+            });
+            const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "zine-pro-geist.json"; a.click();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    inputs.forEach((id, index) => {
+                        const num = index + 1;
+                        if (data[id]) {
+                            if (typeof data[id] === 'object') {
+                                document.getElementById(id).innerHTML = data[id].html || "";
+                                document.getElementById(`align-${num}`).value = data[id].align || "center";
+                                document.getElementById(`size-${num}`).value = data[id].size || "12";
+                            } else {
+                                document.getElementById(id).innerHTML = data[id];
+                            }
+                            updateStyles(num);
+                        }
+                    });
+                    alert("Import successful");
+                } catch (err) { 
+                    console.error(err);
+                    alert("Error reading JSON file."); 
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAll() {
+            if(confirm("Are you sure you want to clear all pages?")) {
+                inputs.forEach((id, index) => {
+                    const num = index + 1;
+                    document.getElementById(id).innerHTML = "";
+                    document.getElementById(`align-${num}`).value = "center";
+                    document.getElementById(`size-${num}`).value = "12";
+                    updateStyles(num);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
