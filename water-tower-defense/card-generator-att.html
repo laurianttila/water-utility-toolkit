@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cybersecurity Card Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<style>
+        /* General Setup */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+
+        /* A4 Paper Layout */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto 20px auto;
+            padding: 10mm; 
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            
+            /* UPDATED: First number is Row Gap (Vertical), second is Column Gap (Horizontal) */
+            /* 10mm space between rows makes cutting much easier */
+            gap: 10mm 5mm; 
+        }
+
+        /* The Card Design */
+        .card {
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            
+            /* This ensures the card fills the grid cell */
+            height: 100%; 
+            background: white;
+            box-sizing: border-box;
+        }
+
+        /* Make the cut lines easier to see */
+        .card {
+             border: 1px dashed #333; /* Dashed line suggests "cut here" */
+        }
+
+        .card-header {
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        .card-body {
+            font-size: 24px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            font-size: 10px;
+            text-align: right;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        /* Category Themes - Cybersecurity Style */
+        /* I made the borders solid again here so the color pops, but kept the main border thin */
+        .card.cyber {
+            border: 2px solid #d32f2f; 
+            background-color: #fff5f5;
+        }
+        .card.cyber .card-header { color: #d32f2f; border-bottom-color: #d32f2f; }
+        .card.physical {
+            border: 2px solid #1976d2; 
+            background-color: #f0f7ff;
+        }
+        .card.physical .card-header { color: #1976d2; border-bottom-color: #1976d2; }
+        .card.information {
+            border: 2px solid #388e3c; 
+            background-color: #f1f8e9;
+        }
+        .card.information .card-header { color: #388e3c; border-bottom-color: #388e3c; }
+        /* Printing Rules */
+        @media print {
+            body { background: none; padding: 0; }
+            .controls { display: none; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>Card Generator</h2>
+        <p>Upload your CSV file (Columns: <strong>Type</strong>, <strong>Title</strong>, <strong>Description</strong>)</p>
+        <input type="file" id="csvFile" accept=".csv" />
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                encoding: "ISO-8859-1", 
+                complete: function(results) {
+                    generateCards(results.data);
+                }
+            });
+        });
+
+        function generateCards(data) {
+            const output = document.getElementById('output');
+            output.innerHTML = ''; // Clear old cards
+
+            let currentPage = createPage();
+            let cardCount = 0;
+
+            data.forEach(row => {
+                // If page is full (9 cards), make new page
+                if (cardCount === 9) {
+                    output.appendChild(currentPage);
+                    currentPage = createPage();
+                    cardCount = 0;
+                }
+
+                // Create the card
+                const card = document.createElement('div');
+                // We add the class based on the "Type" column to change colors
+                const typeClass = row.Type ? row.Type.toLowerCase().trim() : 'default';
+                card.className = `card ${typeClass}`;
+                
+                card.innerHTML = `
+                    <div class="card-header">${row.Title || 'Untitled'}</div>
+                    <div class="card-body">${row.Description || 'No description provided.'}</div>
+                    <div class="card-footer">${row.Type || 'General'}</div>
+                `;
+
+                currentPage.appendChild(card);
+                cardCount++;
+            });
+
+            // Append the last page if it has any cards
+            if (cardCount > 0) {
+                output.appendChild(currentPage);
+            }
+        }
+
+        function createPage() {
+            const div = document.createElement('div');
+            div.className = 'page';
+            return div;
+        }
+    </script>
+</body>
+</html>
