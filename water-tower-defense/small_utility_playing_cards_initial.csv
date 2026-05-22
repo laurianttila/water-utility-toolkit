@@ -1,0 +1,61 @@
+Type;Title;Description
+Cyber;Office Ransomware Attack;Hackers lock the small utility office computers, halting all customer billing and administrative work.
+Cyber;Chemical Dosing Manipulation;Attackers breach the plant control system online to change chemical levels to dangerous amounts.
+Cyber;Compromised Remote Access;Criminals use an operator's weak password to log into the treatment network from a home computer.
+Cyber;Outsourced Vendor Malware;Hackers hide a virus inside a software update from a third-party IT vendor to secretly enter the network.
+Cyber;Control System Wiper;A destructive virus deletes everything on the main plant computer, making the control system useless.
+Cyber;Operator Phishing Email;Attackers send trick emails to the plant operator to steal passwords or install network viruses.
+Cyber;Insider Process Sabotage;A disgruntled employee uses valid logins to manipulate pumps and sabotage treatment machinery.
+Cyber;Payment Portal DDoS;Activist groups flood the online bill payment page with fake traffic, crashing customer access.
+Cyber;False Control Commands;Hackers send false electronic commands to force distribution pumps or valves to turn off.
+Cyber;Asset Map Theft;Hackers steal digital asset maps and process flow diagrams to plan a physical attack on the network.
+Cyber;Office Router Exploit;Attackers exploit weaknesses in basic office internet routers to slip inside the operational network.
+Cyber;Infected USB Drive;An operator plugs an infected USB stick into a plant computer, bypassing the network security gap.
+Cyber;Logging Software Exploit;Hackers use a global defect in common software code to run malicious commands on utility logging servers.
+Cyber;Credential Brute Force;Automated programs test thousands of passwords to break into remote well monitoring tools.
+Cyber;Telemetry Data Spoofing;Hackers alter sensor data to show a storage tank is full when it is actually running dry.
+Cyber;Local Supplier Breach;Hackers breach a local chemical distributor's network, disrupting scheduled chlorine deliveries.
+Cyber;Fake Login Page;Criminals trick employees into using a fake link that steals their email and system passwords.
+Cyber;Personal Device Infection;An operator connects a personal laptop to the plant Wi-Fi, accidentally spreading a network virus.
+Cyber;Customer Data Theft;Hackers find a loophole in the simple online billing system to download private citizen records.
+Cyber;Delayed Logic Bomb;A malicious contractor hides code in a system update that suddenly shuts down well pumps weeks later.
+Physical;Rural Substation Attack;Attackers shoot at the local electrical substation powering the facility, causing a total plant blackout.
+Physical;Water Main Sabotage;Saboteurs use heavy tools to break a major distribution pipe, dropping water pressure town-wide.
+Physical;Finished Water Contamination;Intruders scale a chain-link fence to dump toxic substances into an open finished water reservoir.
+Physical;Copper Grounding Theft;Thieves steal copper wires from an unmanned lift station, causing machinery to burn out in a storm.
+Physical;Drone Explosive Strike;A small commercial drone drops a light explosive onto open clarifier tanks to destroy equipment.
+Physical;Distribution Valve Tampering;Intruders open an isolated street vault and manually turn a valve to cut off neighborhood water.
+Physical;Chemical Shed Arson;Arsonists burn down an unmonitored chemical shed, destroying the utility's entire disinfection supply.
+Physical;Chemical Delivery Hijacking;Criminals hijack a local delivery truck carrying chlorine cylinders to use the chemicals for harm.
+Physical;Wellhouse Physical Breach;An attacker breaks the padlock on a remote wellhouse and plugs a laptop directly into the machines.
+Physical;Source Water Pollution;An upstream spill on a local creek forces the water plant to close its intake gates to protect the public.
+Physical;Telemetry Cable Cutting;Vandals cut exposed overhead lines, leaving the office blind to remote well pump operations.
+Physical;Hostile Vehicle Ramming;A heavy vehicle rams through the chain gate into the small treatment building to smash equipment.
+Physical;Backup Generator Sabotage;Saboteurs drain the fuel tank of the emergency backup engine right before a major storm hits.
+Physical;Elevated Tank Trespassing;Trespassers climb an unmonitored storage tank, leaving the top access hatch open to dirt and rain.
+Physical;Outdoor Chemical Theft;Thieves steal plastic containers of coagulation or disinfection chemicals from an outdoor yard.
+Physical;Sampling Station Tampering;Vandals pour contaminants into a roadside sampling box to trigger a false water quality alarm.
+Physical;Perimeter Lock Destacking;Intruders use simple bolt cutters on gate locks to enter a water resource recovery facility undetected.
+Physical;GPS Signal Jamming;Attackers use a pocket jammer to disrupt handheld GPS devices, stopping crews from locating buried valves.
+Physical;Storage Tank Vandalism;Vandals use hunting rifles from a distance to shoot holes into rural storage tanks, causing leaks.
+Physical;Well Head Contamination;Saboteurs pry open an unmonitored groundwater well head cap to pour toxic waste directly inside.
+Information;Water Quality Disinformation;Fake social media posts spread rumors that the town drinking water contains high lead levels.
+Information;Spoofed SMS Advisories;Attackers send fake text alerts to town residents claiming a boil water advisory is active.
+Information;Utility Manager Deepfake;An AI-generated video of the utility manager claiming the public water supply is toxic goes viral.
+Information;Operator Personnel Doxxing;Online groups post home addresses of the utility's few operators to intimidate and threaten them.
+Information;Utility Billing Phishing;Scammers email residents offering fake water bill discounts to steal their banking passwords.
+Information;Fake Outage Announcement;A forged notice on a local community Facebook page claims the town water will be cut off for a week.
+Information;Office Phone Scam;An attacker calls the office clerk pretending to be the IT contractor to trick them into giving passwords.
+Information;Impersonated Utility Worker;A spy wears a safety vest and carries a fake badge to trick a homeowner into showing asset locations.
+Information;Sanitary Survey Leak;An attacker leaks a state inspection report detailing the utility's security flaws onto public forums.
+Information;Fluoridation Rumor Campaign;Organized groups build fake local blogs claiming standard treatment processes like fluoridation are poison.
+Information;Domain Typosquatting Attack;Attackers buy a misspelled town website link to create a fake portal that steals clerk login data.
+Information;Valve Map Sale;A thief copies physical GIS printouts or digital coordinates to sell them to bad actors online.
+Information;Vendor Invoice Fraud;Attackers send a fake bill to the utility clerk pretending to be the engineering firm to steal funds.
+Information;Upgrade Funding Disruption;Fake local internet groups spread bad studies to convince town voters to reject plant upgrade funding.
+Information;Billing Format Manipulation;Attackers alter bill layouts so residents receive massive incorrect water bills, sparking community rage.
+Information;Utility Board Smear;Anonymous actors publish fake documents claiming utility board members stole money from the testing budget.
+Information;Emergency Alert Spoofing;Hackers break into the local community notification system to send false alerts about a chemical leak.
+Information;Office Wi-Fi Eavesdropping;Spies sit outside the small utility office to intercept traffic from a weakly secured office Wi-Fi.
+Information;Consumer Consumption Leak;An insider leaks water use records of specific commercial businesses to create a local news scandal.
+Information;Water Testing Scam;Deceptive letters sent to residents claim town water is unsafe in order to sell unneeded filters.
