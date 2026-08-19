@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Software Risk & Vendor Evaluation Assistant</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent-bg: #eff6ff;
+      --accent-border: #bfdbfe;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 620px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 32px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .logo-placeholder {
+      width: 72px;
+      height: 72px;
+      background-color: var(--accent-bg);
+      border: 2px dashed var(--accent-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+
+    .language-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .language-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lang-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      background-color: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+
+    .lang-card:hover {
+      border-color: var(--primary);
+      background-color: var(--accent-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px -2px rgba(37, 99, 235, 0.12);
+    }
+
+    .flag-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .lang-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+
+    .lang-desc {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .footer-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo-placeholder">LOGO</div>
+    <h1>Software Selection Assistant</h1>
+    <p class="subtitle">Valitse kieli / Select your language to begin the assessment</p>
+
+    <div class="language-grid">
+      <!-- Finnish Version Link -->
+      <a href="fi.html" class="lang-card">
+        <div class="flag-icon">🇫🇮</div>
+        <div class="lang-title">Suomeksi</div>
+        <div class="lang-desc">Ohjattu arviointityökalu vesihuoltolaitoksille ja osuuskunnille</div>
+      </a>
+
+      <!-- English Version Link -->
+      <a href="en.html" class="lang-card">
+        <div class="flag-icon">🇬🇧</div>
+        <div class="lang-title">English</div>
+        <div class="lang-desc">Guided intake assessment for small utilities and cooperatives</div>
+      </a>
+    </div>
+
+    <div class="footer-note">
+      Research evaluation prototype &bull; Built with client-side zero-data-transmission architecture
+    </div>
+  </div>
+
+</body>
+</html>

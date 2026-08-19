@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Software Risk & Vendor Evaluation Assistant</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent-bg: #eff6ff;
+      --accent-border: #bfdbfe;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #b45309;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --danger-text: #dc2626;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 720px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      border: 1px solid var(--border);
+    }
+
+    .logo-placeholder {
+      width: 80px;
+      height: 80px;
+      background-color: var(--accent-bg);
+      border: 2px dashed var(--accent-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px auto;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .progress-bar::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: var(--border);
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 4px;
+      background-color: var(--primary);
+      transform: translateY(-50%);
+      z-index: 1;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .step-indicator {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      z-index: 2;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .step-indicator:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .step-indicator.active {
+      border-color: var(--primary);
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .step-indicator.completed {
+      border-color: var(--primary);
+      background-color: var(--accent-bg);
+      color: var(--primary);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    p.intro-text {
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 1.05rem;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .field-group {
+      margin-bottom: 24px;
+    }
+
+    .field-label {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    input.text-input, textarea.text-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    textarea.text-input {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input.text-input:focus, textarea.text-input:focus {
+      border-color: var(--primary);
+    }
+
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      border-color: var(--accent-border);
+      background-color: var(--accent-bg);
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background-color: var(--accent-bg);
+    }
+
+    .option-card input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: var(--primary);
+    }
+
+    .option-content label {
+      font-weight: 600;
+      cursor: pointer;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .option-content span {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .info-box {
+      background-color: var(--accent-bg);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .info-box.warning {
+      background-color: var(--warning-bg);
+      border-left-color: var(--warning-text);
+    }
+
+    .info-box.danger {
+      background-color: var(--danger-bg);
+      border-left-color: var(--danger-text);
+    }
+
+    .info-box h4 {
+      color: var(--primary);
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .info-box.warning h4 { color: var(--warning-text); }
+    .info-box.danger h4 { color: var(--danger-text); }
+
+    .report-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      background-color: var(--bg);
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .report-meta-item strong {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .report-meta-item span, .report-meta-item input {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .report-meta-item input.date-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px dashed var(--text-muted);
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+    }
+
+    .report-section {
+      margin-bottom: 28px;
+    }
+
+    .report-section h3 {
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    .report-table th, .report-table td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .report-table th {
+      background-color: var(--bg);
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .badge-pass { background-color: #dcfce7; color: #15803d; }
+    .badge-warn { background-color: #fef3c7; color: #b45309; }
+    .badge-fail { background-color: #fee2e2; color: #b91c1c; }
+    .badge-soft { background-color: #f1f5f9; color: #475569; }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover { background-color: var(--primary-hover); }
+    .btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      width: auto;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .btn-danger-outline {
+      background-color: transparent;
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
+      width: auto;
+    }
+
+    .btn-danger-outline:hover {
+      background-color: var(--danger-bg);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media print {
+      body { background: white !important; color: black !important; padding: 0 !important; }
+      .container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
+      .progress-bar, .nav-actions, #start-btn, .no-print { display: none !important; }
+      .info-box { border-left-width: 3px !important; background-color: #f8fafc !important; break-inside: avoid; }
+      .report-section { break-inside: avoid; }
+      input.date-input { border-bottom: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Screen 1: Welcome/Intro -->
+    <div id="screen-intro">
+      <div class="logo-placeholder">LOGO</div>
+      <h1>Software Selection Assistant</h1>
+      <p class="intro-text">
+        This guided wizard helps you evaluate your software needs, identify operational and security risks, and generate an archival report for internal risk management.
+      </p>
+      <button class="btn" id="start-btn">Start Assessment</button>
+    </div>
+
+    <!-- Dynamic Wizard Screens -->
+    <div id="screen-wizard" class="hidden">
+      <div class="progress-bar">
+        <div class="progress-line" id="progress-line"></div>
+        <div class="step-indicator active" data-step="1" title="Go to Step 1: Need">1</div>
+        <div class="step-indicator" data-step="2" title="Go to Step 2: Vendor">2</div>
+        <div class="step-indicator" data-step="3" title="Go to Step 3: Security">3</div>
+        <div class="step-indicator" data-step="4" title="Go to Step 4: Contract">4</div>
+        <div class="step-indicator" data-step="5" title="Go to Step 5: Report">5</div>
+      </div>
+
+      <div id="wizard-content"></div>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary hidden" id="back-btn">Back</button>
+        <button class="btn btn-danger-outline" id="reset-btn">Clear & Restart</button>
+        <button class="btn" id="next-btn" disabled style="flex-grow: 1;">Next Step</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createInitialState() {
+      return {
+        evaluationDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        problemStatement: '',
+        isCoreSystem: null,
+        vendorName: '',
+        hasNamedContact: null,
+        vendorDisappearanceRisk: null,
+        serviceLevel: null,
+        hasSecurityProof: null,
+        allowsDataPortability: null,
+        deploymentModel: null,
+        isActivelyMaintained: null,
+        isDataEncrypted: null,
+        hasMfaSupport: null,
+        isRemoteAccessSecure: null,
+        hasActivityLogs: null,
+        hasDisasterRecoveryPlan: null,
+        hasRoleBasedAccess: null,
+        contractHasSla: null,
+        contractHasPatchingProcess: null,
+        contractHasCveTimelines: null,
+        contractHasOffsiteBackups: null,
+        contractHasDisasterSupport: null,
+        contractHasDataExport: null,
+        contractHasTerminationTerms: null
+      };
+    }
+
+    const state = {
+      currentStep: 1,
+      totalSteps: 5,
+      data: createInitialState()
+    };
+
+    const savedState = localStorage.getItem('software_wizard_data');
+    if (savedState) {
+      Object.assign(state.data, JSON.parse(savedState));
+    }
+
+    function persistData() {
+      localStorage.setItem('software_wizard_data', JSON.stringify(state.data));
+    }
+
+    const screenIntro = document.getElementById('screen-intro');
+    const screenWizard = document.getElementById('screen-wizard');
+    const startBtn = document.getElementById('start-btn');
+    const backBtn = document.getElementById('back-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const wizardContent = document.getElementById('wizard-content');
+    const progressLine = document.getElementById('progress-line');
+
+    startBtn.addEventListener('click', () => {
+      screenIntro.classList.add('hidden');
+      screenWizard.classList.remove('hidden');
+      renderStep(state.currentStep);
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderStep(state.currentStep);
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all answers and start a new evaluation?')) {
+        localStorage.removeItem('software_wizard_data');
+        state.data = createInitialState();
+        state.currentStep = 1;
+        renderStep(1);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (state.currentStep < state.totalSteps) {
+        state.currentStep++;
+        renderStep(state.currentStep);
+      } else if (state.currentStep === state.totalSteps) {
+        window.print();
+      }
+    });
+
+    document.querySelectorAll('.step-indicator').forEach(indicator => {
+      indicator.addEventListener('click', (e) => {
+        const targetStep = parseInt(e.currentTarget.dataset.step);
+        if (targetStep !== state.currentStep) {
+          state.currentStep = targetStep;
+          renderStep(state.currentStep);
+        }
+      });
+    });
+
+    function updateProgress() {
+      const indicators = document.querySelectorAll('.step-indicator');
+      indicators.forEach(ind => {
+        const stepNum = parseInt(ind.dataset.step);
+        if (stepNum === state.currentStep) {
+          ind.className = 'step-indicator active';
+        } else if (isStepComplete(stepNum)) {
+          ind.className = 'step-indicator completed';
+        } else {
+          ind.className = 'step-indicator';
+        }
+      });
+
+      const percentage = ((state.currentStep - 1) / (state.totalSteps - 1)) * 100;
+      progressLine.style.width = percentage + '%';
+      backBtn.classList.toggle('hidden', state.currentStep === 1);
+    }
+
+    function isStepComplete(step) {
+      if (step === 1) return state.data.isCoreSystem !== null;
+      if (step === 2) {
+        return state.data.hasNamedContact !== null &&
+               state.data.vendorDisappearanceRisk !== null &&
+               state.data.serviceLevel !== null &&
+               state.data.hasSecurityProof !== null &&
+               state.data.allowsDataPortability !== null;
+      }
+      if (step === 3) {
+        return state.data.deploymentModel !== null &&
+               state.data.isActivelyMaintained !== null &&
+               state.data.isDataEncrypted !== null &&
+               state.data.hasMfaSupport !== null &&
+               state.data.isRemoteAccessSecure !== null &&
+               state.data.hasActivityLogs !== null &&
+               state.data.hasDisasterRecoveryPlan !== null &&
+               state.data.hasRoleBasedAccess !== null;
+      }
+      if (step === 4) {
+        return state.data.contractHasSla !== null &&
+               state.data.contractHasPatchingProcess !== null &&
+               state.data.contractHasCveTimelines !== null &&
+               state.data.contractHasOffsiteBackups !== null &&
+               state.data.contractHasDisasterSupport !== null &&
+               state.data.contractHasDataExport !== null &&
+               state.data.contractHasTerminationTerms !== null;
+      }
+      return true;
+    }
+
+    function renderStep(step) {
+      updateProgress();
+      wizardContent.innerHTML = '';
+
+      if (step === 1) renderScreen2();
+      else if (step === 2) renderScreen3();
+      else if (step === 3) renderScreen4();
+      else if (step === 4) renderScreen5();
+      else if (step === 5) renderScreen6();
+    }
+
+    // --- SCREEN 2: Problem & Core System ---
+    function renderScreen2() {
+      const template = `
+        <h2 class="section-title">1. Understanding Your Need</h2>
+        
+        <div class="field-group">
+          <label class="field-label" for="problem-input">What problem or need are you trying to solve?</label>
+          <div class="field-hint">Briefly describe what you want the software to achieve for your utility.</div>
+          <textarea id="problem-input" class="text-input" placeholder="e.g., Automate customer billing, water quality reporting, or pump maintenance tracking...">${state.data.problemStatement}</textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Is this related to core functionality of the company?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.isCoreSystem === true ? 'selected' : ''}" onclick="selectCoreOption(true)">
+              <input type="radio" name="core-system" ${state.data.isCoreSystem === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes, core business system</label><span>High impact on utility operations if software fails.</span></div>
+            </div>
+            <div class="option-card ${state.data.isCoreSystem === false ? 'selected' : ''}" onclick="selectCoreOption(false)">
+              <input type="radio" name="core-system" ${state.data.isCoreSystem === false ? 'checked' : ''}>
+              <div class="option-content"><label>No, non-critical / pilot need</label><span>Low immediate operational impact on water services.</span></div>
+            </div>
+          </div>
+        </div>
+        <div id="info-box-container"></div>
+      `;
+
+      wizardContent.innerHTML = template;
+
+      document.getElementById('problem-input').addEventListener('input', (e) => {
+        state.data.problemStatement = e.target.value;
+        persistData();
+      });
+
+      if (state.data.isCoreSystem !== null) updateCoreFeedback(state.data.isCoreSystem);
+      else nextBtn.disabled = true;
+    }
+
+    window.selectCoreOption = function(isCore) {
+      state.data.isCoreSystem = isCore;
+      persistData();
+      renderScreen2();
+    };
+
+    function updateCoreFeedback(isCore) {
+      const container = document.getElementById('info-box-container');
+      nextBtn.disabled = false;
+      if (isCore) {
+        container.innerHTML = `<div class="info-box"><h4>Core System Guidance</h4><p>Because this system is critical to core operations, rigorous vendor validation, security checks, and continuity guarantees are recommended.</p></div>`;
+        nextBtn.textContent = 'Next: Vendor Evaluation';
+        nextBtn.onclick = null;
+      } else {
+        container.innerHTML = `
+          <div class="info-box warning">
+            <h4>Things to Know: Non-Critical Tool Risks</h4>
+            <p><strong>Evaluation is optional here, but keep these key operational and network risks in mind:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 6px; font-size: 0.88rem;">
+              <li><strong>Maintenance Debt:</strong> Every new software tool, even a minor one, adds ongoing administrative overhead like password resets, updates, and billing. Multiple small tools accumulate into significant maintenance drag.</li>
+              <li><strong>Knowledge Concentration:</strong> Ensure more than one staff member knows how to use, configure, and maintain this software. If the primary user leaves, unmaintained tools often become abandoned "ghost systems."</li>
+              <li><strong>Network Spreading & Stepping Stone Risk:</strong> If this non-critical tool is installed on utility laptops or connected to office PCs or servers, an attacker who infects this tool can use that laptop as a stepping stone to jump into adjacent billing or SCADA water networks. Standalone web tools hosted purely in the vendor cloud avoid this local network risk.</li>
+            </ul>
+          </div>
+          <div style="margin-top:16px; display:flex; gap:10px;">
+            <button class="btn btn-secondary" style="font-size:0.9rem; padding:10px 16px;" onclick="jumpToSummary()">Skip Directly to Summary Report</button>
+          </div>
+        `;
+        nextBtn.textContent = 'Continue Optional Evaluation';
+      }
+    }
+
+    window.jumpToSummary = function() {
+      state.currentStep = 5;
+      renderStep(5);
+    };
+
+    // --- SCREEN 3: Vendor Evaluation ---
+    function renderScreen3() {
+      const template = `
+        <h2 class="section-title">2. Vendor & Support Evaluation</h2>
+
+        <div class="field-group">
+          <label class="field-label" for="vendor-name-input">Vendor or Company Name</label>
+          <input type="text" id="vendor-name-input" class="text-input" placeholder="e.g., HydroTech Systems Oy" value="${state.data.vendorName}">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Will you have a dedicated, named support contact person?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasNamedContact === true ? 'selected' : ''}" onclick="selectVendorOption('hasNamedContact', true)">
+              <input type="radio" name="c-opt" ${state.data.hasNamedContact === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>A specific account manager or engineer is assigned to our utility.</span></div>
+            </div>
+            <div class="option-card ${state.data.hasNamedContact === false ? 'selected' : ''}" onclick="selectVendorOption('hasNamedContact', false)">
+              <input type="radio" name="c-opt" ${state.data.hasNamedContact === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>Support is handled through a generic helpdesk ticket queue.</span></div>
+            </div>
+          </div>
+          <div id="contact-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Is there a risk this vendor could shut down or stop supporting the tool during your planned usage?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.vendorDisappearanceRisk === true ? 'selected' : ''}" onclick="selectVendorOption('vendorDisappearanceRisk', true)">
+              <input type="radio" name="r-opt" ${state.data.vendorDisappearanceRisk === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes / Unsure</label><span>Small startup, early-stage vendor, or planned usage over 5+ years.</span></div>
+            </div>
+            <div class="option-card ${state.data.vendorDisappearanceRisk === false ? 'selected' : ''}" onclick="selectVendorOption('vendorDisappearanceRisk', false)">
+              <input type="radio" name="r-opt" ${state.data.vendorDisappearanceRisk === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>Established vendor with strong financial backing.</span></div>
+            </div>
+          </div>
+          <div id="risk-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">How fast does the vendor promise to respond if the software breaks down?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.serviceLevel === 'best_effort' ? 'selected' : ''}" onclick="selectVendorOption('serviceLevel', 'best_effort')">
+              <input type="radio" name="s-opt" ${state.data.serviceLevel === 'best_effort' ? 'checked' : ''}>
+              <div class="option-content"><label>Best Effort (24–48 hours)</label><span>Low cost, but no binding guarantee on when problems get fixed.</span></div>
+            </div>
+            <div class="option-card ${state.data.serviceLevel === 'business_hours' ? 'selected' : ''}" onclick="selectVendorOption('serviceLevel', 'business_hours')">
+              <input type="radio" name="s-opt" ${state.data.serviceLevel === 'business_hours' ? 'checked' : ''}>
+              <div class="option-content"><label>Guaranteed Business Hours Support</label><span>Issues acknowledged within hours during weekday work hours.</span></div>
+            </div>
+            <div class="option-card ${state.data.serviceLevel === '24_7' ? 'selected' : ''}" onclick="selectVendorOption('serviceLevel', '24_7')">
+              <input type="radio" name="s-opt" ${state.data.serviceLevel === '24_7' ? 'checked' : ''}>
+              <div class="option-content"><label>24/7 Emergency Support</label><span>High cost. Round-the-clock immediate availability for major outages.</span></div>
+            </div>
+          </div>
+          <div id="sla-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Can the vendor provide written documentation of their backup and security routines?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasSecurityProof === true ? 'selected' : ''}" onclick="selectVendorOption('hasSecurityProof', true)">
+              <input type="radio" name="sec-opt" ${state.data.hasSecurityProof === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>They have written backup, disaster recovery, and security documents.</span></div>
+            </div>
+            <div class="option-card ${state.data.hasSecurityProof === false ? 'selected' : ''}" onclick="selectVendorOption('hasSecurityProof', false)">
+              <input type="radio" name="sec-opt" ${state.data.hasSecurityProof === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>They cannot provide clear documentation on backups or security.</span></div>
+            </div>
+          </div>
+          <div id="security-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the vendor explicitly agree that you can export all your utility data in a standard format?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.allowsDataPortability === true ? 'selected' : ''}" onclick="selectVendorOption('allowsDataPortability', true)">
+              <input type="radio" name="p-opt" ${state.data.allowsDataPortability === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>You can export database records or logs into CSV or standard spreadsheets.</span></div>
+            </div>
+            <div class="option-card ${state.data.allowsDataPortability === false ? 'selected' : ''}" onclick="selectVendorOption('allowsDataPortability', false)">
+              <input type="radio" name="p-opt" ${state.data.allowsDataPortability === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>Your data is locked inside their proprietary system with no exit route.</span></div>
+            </div>
+          </div>
+          <div id="portability-feedback"></div>
+        </div>
+      `;
+
+      wizardContent.innerHTML = template;
+
+      document.getElementById('vendor-name-input').addEventListener('input', (e) => {
+        state.data.vendorName = e.target.value;
+        persistData();
+      });
+
+      renderVendorInlineFeedback();
+    }
+
+    window.selectVendorOption = function(field, value) {
+      state.data[field] = value;
+      persistData();
+      renderScreen3();
+    };
+
+    function renderVendorInlineFeedback() {
+      const contactBox = document.getElementById('contact-feedback');
+      if (state.data.hasNamedContact === true) {
+        contactBox.innerHTML = `<div class="info-box"><h4>Things to Know: Dedicated Support</h4><p>Confirm escalation protocols or secondary contacts for when your primary contact is sick or on vacation.</p></div>`;
+      } else if (state.data.hasNamedContact === false) {
+        contactBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Shared Support Desk</h4><p>Ensure helpdesk agents have easy access to your utility's historical records to resolve tickets efficiently.</p></div>`;
+      }
+
+      const riskBox = document.getElementById('risk-feedback');
+      if (state.data.vendorDisappearanceRisk === true) {
+        riskBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Continuity Risk</h4><p>Ensure strong data export guarantees or source code escrow rights so operations continue if the vendor shuts down.</p></div>`;
+      } else if (state.data.vendorDisappearanceRisk === false) {
+        riskBox.innerHTML = `<div class="info-box"><h4>Things to Know: Stable Vendor</h4><p>Established market position reduces vendor insolvency risk.</p></div>`;
+      }
+
+      const slaBox = document.getElementById('sla-feedback');
+      if (state.data.serviceLevel === 'best_effort') {
+        slaBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Best Effort Response</h4><p>High operational risk during outages. Ensure manual workarounds exist for critical operational days.</p></div>`;
+      } else if (state.data.serviceLevel === 'business_hours') {
+        slaBox.innerHTML = `<div class="info-box"><h4>Things to Know: Business Hours Support</h4><p>Balanced cost and protection for standard weekday office operations.</p></div>`;
+      } else if (state.data.serviceLevel === '24_7') {
+        slaBox.innerHTML = `<div class="info-box"><h4>Things to Know: 24/7 Support</h4><p>High ongoing cost. Confirm whether 24/7 response is strictly necessary before subscribing.</p></div>`;
+      }
+
+      const secBox = document.getElementById('security-feedback');
+      if (state.data.hasSecurityProof === false) {
+        secBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Unverified Security</h4><p>Major Risk: Unverified backup or security policies leave data vulnerable to unexpected loss or breaches.</p></div>`;
+      } else if (state.data.hasSecurityProof === true) {
+        secBox.innerHTML = `<div class="info-box"><h4>Things to Know: Verified Processes</h4><p>Perform a quick check to verify automated backups occur at least daily.</p></div>`;
+      }
+
+      const portBox = document.getElementById('portability-feedback');
+      if (state.data.allowsDataPortability === false) {
+        portBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Vendor Lock-in</h4><p>Critical Risk: Leaving this software in the future will be difficult or costly if data cannot be exported.</p></div>`;
+      } else if (state.data.allowsDataPortability === true) {
+        portBox.innerHTML = `<div class="info-box"><h4>Things to Know: Data Portability</h4><p>Ask the vendor to demonstrate a sample data export prior to contract signing.</p></div>`;
+      }
+
+      nextBtn.disabled = !isStepComplete(2);
+      nextBtn.textContent = 'Next: Evaluate Software Security';
+    }
+
+    // --- SCREEN 4: Software Security ---
+    function renderScreen4() {
+      const template = `
+        <h2 class="section-title">3. Software Security & Technical Quality</h2>
+
+        <div class="field-group">
+          <label class="field-label">Where is this software installed and executed?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.deploymentModel === 'cloud' ? 'selected' : ''}" onclick="selectSoftwareOption('deploymentModel', 'cloud')">
+              <input type="radio" name="dep-opt" ${state.data.deploymentModel === 'cloud' ? 'checked' : ''}>
+              <div class="option-content">
+                <label>Vendor Web Tool (Runs outside your local office network)</label>
+                <span>Accessed strictly through a web browser; no software installed on utility computers.</span>
+              </div>
+            </div>
+            <div class="option-card ${state.data.deploymentModel === 'local' ? 'selected' : ''}" onclick="selectSoftwareOption('deploymentModel', 'local')">
+              <input type="radio" name="dep-opt" ${state.data.deploymentModel === 'local' ? 'checked' : ''}>
+              <div class="option-content">
+                <label>Installed directly on utility laptops, office PCs, local servers, or vendor servers connected to utility network</label>
+                <span>Software runs on internal devices OR runs on vendor premises but connects to your network through VPN or direct integrations.</span>
+              </div>
+            </div>
+          </div>
+          <div id="deploy-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Is the software actively updated with regular security fixes and improvements?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.isActivelyMaintained === true ? 'selected' : ''}" onclick="selectSoftwareOption('isActivelyMaintained', true)">
+              <input type="radio" name="m-opt" ${state.data.isActivelyMaintained === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Receives regular updates and security patches from the vendor.</span></div>
+            </div>
+            <div class="option-card ${state.data.isActivelyMaintained === false ? 'selected' : ''}" onclick="selectSoftwareOption('isActivelyMaintained', false)">
+              <input type="radio" name="m-opt" ${state.data.isActivelyMaintained === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Older legacy system or no regular maintenance schedule.</span></div>
+            </div>
+          </div>
+          <div id="maint-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Is utility and customer data scrambled (encrypted) during transfer and while stored?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.isDataEncrypted === true ? 'selected' : ''}" onclick="selectSoftwareOption('isDataEncrypted', true)">
+              <input type="radio" name="e-opt" ${state.data.isDataEncrypted === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Vendor explicitly confirms data encryption in transit and in storage.</span></div>
+            </div>
+            <div class="option-card ${state.data.isDataEncrypted === false ? 'selected' : ''}" onclick="selectSoftwareOption('isDataEncrypted', false)">
+              <input type="radio" name="e-opt" ${state.data.isDataEncrypted === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Encryption details are not confirmed.</span></div>
+            </div>
+          </div>
+          <div id="enc-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does logging in require two-step verification (Password + phone security code)?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasMfaSupport === true ? 'selected' : ''}" onclick="selectSoftwareOption('hasMfaSupport', true)">
+              <input type="radio" name="mfa-opt" ${state.data.hasMfaSupport === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes (Two-Step Login / MFA)</label><span>Adds an extra layer of protection if a password is stolen.</span></div>
+            </div>
+            <div class="option-card ${state.data.hasMfaSupport === false ? 'selected' : ''}" onclick="selectSoftwareOption('hasMfaSupport', false)">
+              <input type="radio" name="mfa-opt" ${state.data.hasMfaSupport === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>Basic password-only login.</span></div>
+            </div>
+          </div>
+          <div id="mfa-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">If accessed remotely (e.g., from home or field sites), are connections protected by a secure gateway or VPN?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.isRemoteAccessSecure === true ? 'selected' : ''}" onclick="selectSoftwareOption('isRemoteAccessSecure', true)">
+              <input type="radio" name="rem-opt" ${state.data.isRemoteAccessSecure === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Access is gated behind a VPN or encrypted connection.</span></div>
+            </div>
+            <div class="option-card ${state.data.isRemoteAccessSecure === false ? 'selected' : ''}" onclick="selectSoftwareOption('isRemoteAccessSecure', false)">
+              <input type="radio" name="rem-opt" ${state.data.isRemoteAccessSecure === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>The system is directly accessible on the open internet without extra protection.</span></div>
+            </div>
+          </div>
+          <div id="remote-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the software keep a digital logbook of user actions and setting changes?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasActivityLogs === true ? 'selected' : ''}" onclick="selectSoftwareOption('hasActivityLogs', true)">
+              <input type="radio" name="l-opt" ${state.data.hasActivityLogs === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Administrators can review who logged in and changed records.</span></div>
+            </div>
+            <div class="option-card ${state.data.hasActivityLogs === false ? 'selected' : ''}" onclick="selectSoftwareOption('hasActivityLogs', false)">
+              <input type="radio" name="l-opt" ${state.data.hasActivityLogs === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>No audit logging capabilities exist.</span></div>
+            </div>
+          </div>
+          <div id="log-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the vendor guarantee fast system restoration after a major outage or crash?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasDisasterRecoveryPlan === true ? 'selected' : ''}" onclick="selectSoftwareOption('hasDisasterRecoveryPlan', true)">
+              <input type="radio" name="dr-opt" ${state.data.hasDisasterRecoveryPlan === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>They have documented emergency recovery timelines.</span></div>
+            </div>
+            <div class="option-card ${state.data.hasDisasterRecoveryPlan === false ? 'selected' : ''}" onclick="selectSoftwareOption('hasDisasterRecoveryPlan', false)">
+              <input type="radio" name="dr-opt" ${state.data.hasDisasterRecoveryPlan === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>No clear emergency recovery timelines defined.</span></div>
+            </div>
+          </div>
+          <div id="dr-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Can user permissions be restricted so staff only see what is needed for their job role?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.hasRoleBasedAccess === true ? 'selected' : ''}" onclick="selectSoftwareOption('hasRoleBasedAccess', true)">
+              <input type="radio" name="rb-opt" ${state.data.hasRoleBasedAccess === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>User access tiers exist (e.g., Read-only vs Operator vs Admin).</span></div>
+            </div>
+            <div class="option-card ${state.data.hasRoleBasedAccess === false ? 'selected' : ''}" onclick="selectSoftwareOption('hasRoleBasedAccess', false)">
+              <input type="radio" name="rb-opt" ${state.data.hasRoleBasedAccess === false ? 'checked' : ''}>
+              <div class="option-content"><label>No</label><span>All staff accounts have full administrative rights.</span></div>
+            </div>
+          </div>
+          <div id="rbac-feedback"></div>
+        </div>
+      `;
+
+      wizardContent.innerHTML = template;
+      renderSoftwareInlineFeedback();
+    }
+
+    window.selectSoftwareOption = function(field, value) {
+      state.data[field] = value;
+      persistData();
+      renderScreen4();
+    };
+
+    function renderSoftwareInlineFeedback() {
+      const deployBox = document.getElementById('deploy-feedback');
+      if (state.data.deploymentModel === 'cloud') {
+        deployBox.innerHTML = `<div class="info-box"><h4>Things to Know: Isolated Web Tool</h4><p>Low Network Risk: Because the tool runs entirely in the vendor's cloud environment, a security breach at the vendor does not give an attacker direct access to your office network, SCADA systems, or billing PCs.</p></div>`;
+      } else if (state.data.deploymentModel === 'local') {
+        deployBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Internal Network Infection Risk</h4><p>High Network Risk: Software running on local devices or hosted remotely with direct network connections to your utility gives the tool a presence inside your network perimeter. If compromised, an attacker can use this connection as a stepping stone to jump into adjacent SCADA or billing networks. Ensure these connections or laptops are kept on a separate, restricted network VLAN.</p></div>`;
+      }
+
+      const maintBox = document.getElementById('maint-feedback');
+      if (state.data.isActivelyMaintained === false) {
+        maintBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Obsolete Software Risk</h4><p>Major Risk: Unmaintained software quickly becomes vulnerable to cyber threats. Consider actively updated alternatives.</p></div>`;
+      } else if (state.data.isActivelyMaintained === true) {
+        maintBox.innerHTML = `<div class="info-box"><h4>Things to Know: Active Maintenance</h4><p>Confirm update distribution methods like automatic cloud updates versus manual desktop patches.</p></div>`;
+      }
+
+      const encBox = document.getElementById('enc-feedback');
+      if (state.data.isDataEncrypted === false) {
+        encBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Unencrypted Data Risk</h4><p>Major Risk: Unencrypted customer data or personally identifiable customer information creates significant privacy and compliance liabilities.</p></div>`;
+      } else if (state.data.isDataEncrypted === true) {
+        encBox.innerHTML = `<div class="info-box"><h4>Things to Know: Data Encryption</h4><p>Verify encryption standards like TLS for transit and AES-256 for stored records.</p></div>`;
+      }
+
+      const mfaBox = document.getElementById('mfa-feedback');
+      if (state.data.hasMfaSupport === false) {
+        mfaBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Weak Login Security</h4><p>Major Risk: Without Two-Step Verification, stolen passwords allow direct unauthorized access to utility data.</p></div>`;
+      } else if (state.data.hasMfaSupport === true) {
+        mfaBox.innerHTML = `<div class="info-box"><h4>Things to Know: Two-Step Verification</h4><p>Ensure Two-Step Login is enforced across all employee accounts during initial software setup.</p></div>`;
+      }
+
+      const remoteBox = document.getElementById('remote-feedback');
+      if (state.data.isRemoteAccessSecure === false) {
+        remoteBox.innerHTML = `<div class="info-box danger"><h4>Things to Know: Public Internet Exposure</h4><p>Critical Risk: Direct public internet access leaves utility systems exposed to automated network attacks.</p></div>`;
+      } else if (state.data.isRemoteAccessSecure === true) {
+        remoteBox.innerHTML = `<div class="info-box"><h4>Things to Know: Secure Remote Connections</h4><p>Ask for documentation explaining how remote connections are encrypted and isolated.</p></div>`;
+      }
+
+      const logBox = document.getElementById('log-feedback');
+      if (state.data.hasActivityLogs === false) {
+        logBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Missing Digital Logbook</h4><p>Without activity logs, investigating security incidents or tracking accidental data overwrites is impossible.</p></div>`;
+      } else if (state.data.hasActivityLogs === true) {
+        logBox.innerHTML = `<div class="info-box"><h4>Things to Know: Digital Audit Trail</h4><p>Confirms operational accountability and satisfies basic utility audit requirements.</p></div>`;
+      }
+
+      const drBox = document.getElementById('dr-feedback');
+      if (state.data.hasDisasterRecoveryPlan === false) {
+        drBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Unplanned Outage Risk</h4><p>Without defined recovery time objectives, restoring system operations during an outage can take weeks.</p></div>`;
+      } else if (state.data.hasDisasterRecoveryPlan === true) {
+        drBox.innerHTML = `<div class="info-box"><h4>Things to Know: Business Continuity</h4><p>Demonstrates vendor readiness to handle server or cloud infrastructure outages.</p></div>`;
+      }
+
+      const rbacBox = document.getElementById('rbac-feedback');
+      if (state.data.hasRoleBasedAccess === false) {
+        rbacBox.innerHTML = `<div class="info-box warning"><h4>Things to Know: Excessive Access Rights</h4><p>Broad admin privileges increase accidental data overwrites and internal security breaches.</p></div>`;
+      } else if (state.data.hasRoleBasedAccess === true) {
+        rbacBox.innerHTML = `<div class="info-box"><h4>Things to Know: Role-Based Access</h4><p>Restricts user permissions strictly to what employees need for their daily tasks.</p></div>`;
+      }
+
+      nextBtn.disabled = !isStepComplete(3);
+      nextBtn.textContent = 'Next: Contractual Terms';
+    }
+
+    // --- SCREEN 5: Contractual Terms ---
+    function renderScreen5() {
+      const template = `
+        <h2 class="section-title">4. Contractual Commitments</h2>
+        <p class="field-hint" style="margin-bottom:20px;">Check your vendor's contract or Service Level Agreement (SLA) to verify if these promises are written in legally binding terms.</p>
+
+        <div class="field-group">
+          <label class="field-label">Is a formal support and uptime guarantee written into the contract?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasSla === true ? 'selected' : ''}" onclick="selectContractOption('contractHasSla', true)">
+              <input type="radio" name="cs-opt" ${state.data.contractHasSla === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Binding support timelines and uptime commitments exist in writing.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasSla === false ? 'selected' : ''}" onclick="selectContractOption('contractHasSla', false)">
+              <input type="radio" name="cs-opt" ${state.data.contractHasSla === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Verbal promises only or no formal contract document.</span></div>
+            </div>
+          </div>
+          <div id="csla-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the contract detail how security patches and updates will be delivered?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasPatchingProcess === true ? 'selected' : ''}" onclick="selectContractOption('contractHasPatchingProcess', true)">
+              <input type="radio" name="cp-opt" ${state.data.contractHasPatchingProcess === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Update schedules and procedures are explicitly stated.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasPatchingProcess === false ? 'selected' : ''}" onclick="selectContractOption('contractHasPatchingProcess', false)">
+              <input type="radio" name="cp-opt" ${state.data.contractHasPatchingProcess === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>No contractual mention of update routines.</span></div>
+            </div>
+          </div>
+          <div id="cpatch-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the vendor commit to a guaranteed timeline for fixing newly discovered security flaws?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasCveTimelines === true ? 'selected' : ''}" onclick="selectContractOption('contractHasCveTimelines', true)">
+              <input type="radio" name="cv-opt" ${state.data.contractHasCveTimelines === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Guaranteed fix timeframe for security flaws.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasCveTimelines === false ? 'selected' : ''}" onclick="selectContractOption('contractHasCveTimelines', false)">
+              <input type="radio" name="cv-opt" ${state.data.contractHasCveTimelines === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>No guaranteed patch response timelines.</span></div>
+            </div>
+          </div>
+          <div id="ccve-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the contract specify isolated, off-site backups?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasOffsiteBackups === true ? 'selected' : ''}" onclick="selectContractOption('contractHasOffsiteBackups', true)">
+              <input type="radio" name="cb-opt" ${state.data.contractHasOffsiteBackups === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Backups are stored in a separate secondary facility.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasOffsiteBackups === false ? 'selected' : ''}" onclick="selectContractOption('contractHasOffsiteBackups', false)">
+              <input type="radio" name="cb-opt" ${state.data.contractHasOffsiteBackups === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Backup isolation is unspecified.</span></div>
+            </div>
+          </div>
+          <div id="cbak-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Does the vendor commit to emergency support during major incidents like cyberattacks?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasDisasterSupport === true ? 'selected' : ''}" onclick="selectContractOption('contractHasDisasterSupport', true)">
+              <input type="radio" name="cd-opt" ${state.data.contractHasDisasterSupport === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Emergency incident assistance duties defined.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasDisasterSupport === false ? 'selected' : ''}" onclick="selectContractOption('contractHasDisasterSupport', false)">
+              <input type="radio" name="cd-opt" ${state.data.contractHasDisasterSupport === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Incident support unaddressed or billed as expensive extra.</span></div>
+            </div>
+          </div>
+          <div id="cdis-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Are data export rights and migration assistance protected by contract?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasDataExport === true ? 'selected' : ''}" onclick="selectContractOption('contractHasDataExport', true)">
+              <input type="radio" name="ce-opt" ${state.data.contractHasDataExport === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Clear rights to export all utility data if you leave.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasDataExport === false ? 'selected' : ''}" onclick="selectContractOption('contractHasDataExport', false)">
+              <input type="radio" name="ce-opt" ${state.data.contractHasDataExport === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>No contractual data export protection.</span></div>
+            </div>
+          </div>
+          <div id="cexp-feedback"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Are contract termination steps and vendor access revocation clearly defined?</label>
+          <div class="options-group">
+            <div class="option-card ${state.data.contractHasTerminationTerms === true ? 'selected' : ''}" onclick="selectContractOption('contractHasTerminationTerms', true)">
+              <input type="radio" name="ct-opt" ${state.data.contractHasTerminationTerms === true ? 'checked' : ''}>
+              <div class="option-content"><label>Yes</label><span>Transition support and credential removal protocol established.</span></div>
+            </div>
+            <div class="option-card ${state.data.contractHasTerminationTerms === false ? 'selected' : ''}" onclick="selectContractOption('contractHasTerminationTerms', false)">
+              <input type="radio" name="ct-opt" ${state.data.contractHasTerminationTerms === false ? 'checked' : ''}>
+              <div class="option-content"><label>No / Unsure</label><span>Termination steps undefined.</span></div>
+            </div>
+          </div>
+          <div id="cterm-feedback"></div>
+        </div>
+      `;
+
+      wizardContent.innerHTML = template;
+      renderContractInlineFeedback();
+    }
+
+    window.selectContractOption = function(field, value) {
+      state.data[field] = value;
+      persistData();
+      renderScreen5();
+    };
+
+    function renderContractInlineFeedback() {
+      const items = [
+        { key: 'contractHasSla', id: 'csla-feedback', warn: 'Without a written SLA, uptime and response promises are legally non-binding during disputes.', ok: 'Formal SLA terms legally recorded in contract.' },
+        { key: 'contractHasPatchingProcess', id: 'cpatch-feedback', warn: 'Unclear patching terms leave ongoing system updates entirely at vendor discretion.', ok: 'Documented security update schedule confirmed.' },
+        { key: 'contractHasCveTimelines', id: 'ccve-feedback', warn: 'Without binding timelines, critical security flaws may sit unpatched for months.', ok: 'Guaranteed patch timeframe for newly disclosed security vulnerabilities.' },
+        { key: 'contractHasOffsiteBackups', id: 'cbak-feedback', warn: 'Backups in the primary system environment can be wiped alongside live data in a ransomware breach.', ok: 'Isolated off-site backup storage explicitly guaranteed.' },
+        { key: 'contractHasDisasterSupport', id: 'cdis-feedback', warn: 'Vendor support during active cyber incidents may be billed at unpredictable extra fees.', ok: 'Vendor incident response duties defined.' },
+        { key: 'contractHasDataExport', id: 'cexp-feedback', warn: 'Without explicit export clauses, vendors can lock data behind exit fees upon contract end.', ok: 'Unrestricted data export rights guaranteed.' },
+        { key: 'contractHasTerminationTerms', id: 'cterm-feedback', warn: 'Undefined exit terms leave vendor system access and credentials active after cancellation.', ok: 'Clear transition procedures and credential revocation protocols established.' }
+      ];
+
+      items.forEach(item => {
+        const val = state.data[item.key];
+        const el = document.getElementById(item.id);
+        if (val === false) {
+          el.innerHTML = `<div class="info-box warning"><h4>Contractual Gap</h4><p>${item.warn}</p></div>`;
+        } else if (val === true) {
+          el.innerHTML = `<div class="info-box"><h4>Contract Term Verified</h4><p>${item.ok}</p></div>`;
+        }
+      });
+
+      nextBtn.disabled = !isStepComplete(4);
+      nextBtn.textContent = 'Generate Final Risk Summary';
+    }
+
+    // --- SCREEN 6: Final Printable Summary Report ---
+    function renderScreen6() {
+      const isNonCritical = state.data.isCoreSystem === false;
+      const vendorRisks = [];
+      const softwareRisks = [];
+      const contractRisks = [];
+
+      // 1. Evaluate Specific Vendor Risks
+      if (state.data.hasNamedContact === false) {
+        vendorRisks.push({ title: 'Support Escalation Exposure', text: 'Vendor relies solely on generic ticket queues without a dedicated contact person, creating resolution delays during critical incidents.' });
+      }
+      if (state.data.isCoreSystem && state.data.vendorDisappearanceRisk) {
+        vendorRisks.push({ title: 'Vendor Insolvency / Viability Risk', text: 'System is core to operations, but vendor stability or early-stage lifecycle poses continuity risks if the vendor shuts down.' });
+      }
+      if (state.data.serviceLevel === 'best_effort') {
+        vendorRisks.push({ title: 'SLA & Fix Guarantee Risk', text: 'Vendor offers Best Effort support without binding response or fix guarantees.' });
+      }
+      if (state.data.hasSecurityProof === false) {
+        vendorRisks.push({ title: 'Unverified Vendor Operations', text: 'Vendor cannot provide written proof of internal backup, disaster recovery, or security routines.' });
+      }
+      if (state.data.allowsDataPortability === false) {
+        vendorRisks.push({ title: 'Vendor Lock-in Risk', text: 'Vendor refuses to guarantee readable data exports, risking data loss or excessive migration fees if you switch tools.' });
+      }
+
+      // 2. Evaluate Specific Software & Technical Risks
+      if (state.data.deploymentModel === 'local') {
+        softwareRisks.push({ title: 'Internal Network Infection Risk (Stepping Stone Exposure)', text: 'Software runs on local laptops/PCs OR vendor servers connected to your network. Even for non-critical tools, an internal device infection allows an attacker to use this machine as a stepping stone to jump into adjacent billing or SCADA subnets.' });
+      }
+      if (state.data.isActivelyMaintained === false) {
+        softwareRisks.push({ title: 'Obsolete Software Vulnerability', text: 'Unmaintained software poses an active security threat due to unpatched bugs.' });
+      }
+      if (state.data.isDataEncrypted === false) {
+        softwareRisks.push({ title: 'Data Exposure Liability', text: 'Data is not encrypted at rest or in transit, creating legal and privacy liabilities.' });
+      }
+      if (state.data.hasMfaSupport === false) {
+        softwareRisks.push({ title: 'Weak Authentication', text: 'Lacks Two-Step Verification (MFA), making accounts vulnerable to password breaches.' });
+      }
+      if (state.data.isRemoteAccessSecure === false) {
+        softwareRisks.push({ title: 'Public Internet Exposure', text: 'Remote connections are directly accessible over the public internet without VPN/Gateway protection.' });
+      }
+      if (state.data.hasActivityLogs === false) {
+        softwareRisks.push({ title: 'Missing Audit Trail', text: 'Software lacks administrative access logging, preventing investigation during security incidents.' });
+      }
+
+      // 3. Evaluate Contractual Risks
+      if (state.data.contractHasSla === false) {
+        contractRisks.push({ title: 'Missing Service Level Agreement (SLA)', text: 'No legally binding uptime or support response guarantees exist in writing.' });
+      }
+      if (state.data.contractHasPatchingProcess === false) {
+        contractRisks.push({ title: 'Undefined Patching Terms', text: 'Contract lacks explicit commitments on how software updates and patches are delivered.' });
+      }
+      if (state.data.contractHasCveTimelines === false) {
+        contractRisks.push({ title: 'No Flaw Fix Timeline', text: 'Vendor makes no binding contractual commitment to patch newly discovered security flaws within set days.' });
+      }
+      if (state.data.contractHasOffsiteBackups === false) {
+        contractRisks.push({ title: 'Unprotected Backup Storage', text: 'Contract does not guarantee isolated off-site backup storage, creating single-point-of-failure risks during ransomware incidents.' });
+      }
+      if (state.data.contractHasDisasterSupport === false) {
+        contractRisks.push({ title: 'Undefined Emergency Support', text: 'Contract does not commit vendor support duties during major cyber incidents or outages.' });
+      }
+      if (state.data.contractHasDataExport === false) {
+        contractRisks.push({ title: 'Unprotected Exit Data Rights', text: 'No contractual guarantee that data can be exported in readable formats if the utility cancels services.' });
+      }
+      if (state.data.contractHasTerminationTerms === false) {
+        contractRisks.push({ title: 'Undefined Access Revocation', text: 'No clear protocol for revoking vendor credentials, connections, or system access upon contract termination.' });
+      }
+
+      const template = `
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2>Software Evaluation & Risk Report</h2>
+          <p class="field-hint">Internal Risk Management Assessment Record</p>
+        </div>
+
+        <div class="report-meta">
+          <div class="report-meta-item">
+            <strong>Evaluation Date</strong>
+            <input type="text" id="eval-date-input" class="date-input" value="${state.data.evaluationDate}">
+          </div>
+          <div class="report-meta-item">
+            <strong>Target Vendor</strong>
+            <span>${state.data.vendorName || 'Not Specified'}</span>
+          </div>
+          <div class="report-meta-item">
+            <strong>System Scope</strong>
+            <span>${isNonCritical ? 'Non-Critical / Pilot' : 'Core Business System'}</span>
+          </div>
+          <div class="report-meta-item">
+            <strong>Software Purpose / Description</strong>
+            <span>${state.data.problemStatement || 'Not Specified'}</span>
+          </div>
+        </div>
+
+        ${isNonCritical ? `
+          <div class="report-section">
+            <h3>Non-Critical Evaluation Assessment</h3>
+            <div class="info-box">
+              <h4>Softened Risk Context: Non-Critical System</h4>
+              <p>This software is evaluated for a <strong>non-critical or pilot requirement</strong>. Minor security gaps, unverified SLAs, or startup vendor profiles carry lower operational impact. Identified findings below are <em>advisory considerations</em> rather than critical deployment blockers.</p>
+            </div>
+            <div class="info-box warning" style="margin-top: 10px;">
+              <h4>Organizational Continuity & Maintenance Warning</h4>
+              <p><strong>Even non-critical tools create organizational debt. Ensure your team considers the following before deployment:</strong></p>
+              <ul style="margin-left: 20px; margin-top: 6px; font-size: 0.88rem;">
+                <li><strong>Maintenance Debt:</strong> Every additional software application, regardless of size, adds user management, password administration, software updates, and billing overhead. Multiple small tools accumulate into a significant administrative burden over time.</li>
+                <li><strong>Knowledge Concentration:</strong> Ensure at least two employees understand how to access, operate, and maintain this software. If a single employee sets up a tool and leaves the utility, it often becomes an unmaintained, abandoned "ghost system" with active security permissions.</li>
+                <li><strong>Network Spreading & Stepping Stone Risk:</strong> If this tool is installed on utility laptops or connected to local servers, an attacker who infects this machine can use it as a stepping stone to jump into adjacent SCADA water or billing networks.</li>
+              </ul>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Vendor Risks Section -->
+        <div class="report-section">
+          <h3>${isNonCritical ? 'Advisory Vendor Considerations' : 'Identified Vendor Risks'} (${vendorRisks.length})</h3>
+          ${vendorRisks.length === 0 ? '<p style="font-size:0.9rem; color:#15803d;">No vendor operational red flags were identified during evaluation.</p>' : ''}
+          ${vendorRisks.map(r => `
+            <div class="info-box ${isNonCritical ? 'warning' : 'danger'}">
+              <h4>${r.title}</h4>
+              <p>${r.text}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        ${vendorRisks.length > 0 ? `
+          <div class="report-section">
+            <h3>Vendor Risk Mitigation Strategy</h3>
+            <div class="info-box warning">
+              <h4>Vendor Safeguards (${vendorRisks.length} Items Flagged)</h4>
+              <p>To address identified vendor operational gaps, establish clear safeguards before signing contracts or deploying the tool.</p>
+              <p style="margin-top:8px;"><strong>Actionable Safeguards:</strong> Require named account escalation paths in writing, enforce strict SLA penalty clauses for downtime, demand automated weekly database backups, and ensure internal teams maintain manual workarounds if vendor support delays occur.</p>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Software Technical Risks Section -->
+        <div class="report-section">
+          <h3>${isNonCritical ? 'Advisory Software & Network Considerations' : 'Identified Software & Security Risks'} (${softwareRisks.length})</h3>
+          ${softwareRisks.length === 0 ? '<p style="font-size:0.9rem; color:#15803d;">No software architectural or encryption red flags were identified during evaluation.</p>' : ''}
+          ${softwareRisks.map(r => `
+            <div class="info-box ${isNonCritical ? 'warning' : 'danger'}">
+              <h4>${r.title}</h4>
+              <p>${r.text}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        ${softwareRisks.length > 0 ? `
+          <div class="report-section">
+            <h3>Software Security & Viability Strategy</h3>
+            <div class="info-box warning">
+              <h4>Technical Safeguards (${softwareRisks.length} Items Flagged)</h4>
+              <p>Technical flaws put customer data or internal systems at risk if unaddressed.</p>
+              <p style="margin-top:8px;"><strong>Actionable Safeguards:</strong> Require the vendor to patch critical security gaps prior to onboarding, gate software access behind an internal company VPN/firewall, enforce strong external SSO authentication if native MFA is missing, or consider evaluating an actively maintained alternative software package.</p>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Contractual Risks Section -->
+        <div class="report-section">
+          <h3>Identified Contractual Gaps (${contractRisks.length})</h3>
+          ${contractRisks.length === 0 ? '<p style="font-size:0.9rem; color:#15803d;">No major contractual terms were missing from evaluation.</p>' : ''}
+          ${contractRisks.map(r => `
+            <div class="info-box ${isNonCritical ? 'warning' : 'danger'}">
+              <h4>${r.title}</h4>
+              <p>${r.text}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        ${contractRisks.length > 0 ? `
+          <div class="report-section">
+            <h3>Contractual Leverage Strategy</h3>
+            <div class="info-box warning">
+              <h4>Contractual Safeguards (${contractRisks.length} Gaps Flagged)</h4>
+              <p>Standard contractual protections (SLAs, CVE patch timelines, termination terms) are unaddressed or missing from vendor documents.</p>
+              <p style="margin-top:8px;"><strong>Recommendation:</strong> Request written amendments to include binding SLAs and termination export guarantees prior to contract signature. If negotiating custom terms individually proves difficult as a small buyer, consider joint procurement with peer utilities to leverage collective bargaining power.</p>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="report-section">
+          <h3>Detailed Evaluation Checklist</h3>
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Evaluation Criteria</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Deployment Architecture</td><td>${state.data.deploymentModel === 'cloud' ? '<span class="status-badge badge-pass">Vendor Web Tool</span>' : '<span class="status-badge badge-warn">Local Laptop / Connected Server</span>'}</td></tr>
+              <tr><td>Named Support Contact</td><td>${state.data.hasNamedContact ? '<span class="status-badge badge-pass">Yes</span>' : (isNonCritical ? '<span class="status-badge badge-soft">Optional Gap</span>' : '<span class="status-badge badge-warn">No</span>')}</td></tr>
+              <tr><td>Service Level Tier</td><td><span class="status-badge badge-pass">${state.data.serviceLevel || 'N/A'}</span></td></tr>
+              <tr><td>Security Process Proof</td><td>${state.data.hasSecurityProof ? '<span class="status-badge badge-pass">Provided</span>' : (isNonCritical ? '<span class="status-badge badge-soft">Unverified</span>' : '<span class="status-badge badge-fail">Missing</span>')}</td></tr>
+              <tr><td>Data Export Capabilities</td><td>${state.data.allowsDataPortability ? '<span class="status-badge badge-pass">Supported</span>' : (isNonCritical ? '<span class="status-badge badge-warn">Locked</span>' : '<span class="status-badge badge-fail">Locked</span>')}</td></tr>
+              <tr><td>Active Software Maintenance</td><td>${state.data.isActivelyMaintained ? '<span class="status-badge badge-pass">Maintained</span>' : (isNonCritical ? '<span class="status-badge badge-warn">Unmaintained</span>' : '<span class="status-badge badge-fail">Unmaintained</span>')}</td></tr>
+              <tr><td>Data Encryption (Transit & Rest)</td><td>${state.data.isDataEncrypted ? '<span class="status-badge badge-pass">Encrypted</span>' : (isNonCritical ? '<span class="status-badge badge-warn">Unencrypted</span>' : '<span class="status-badge badge-fail">Unencrypted</span>')}</td></tr>
+              <tr><td>Multi-Factor Authentication (MFA)</td><td>${state.data.hasMfaSupport ? '<span class="status-badge badge-pass">Supported</span>' : (isNonCritical ? '<span class="status-badge badge-soft">Password Only</span>' : '<span class="status-badge badge-fail">Missing</span>')}</td></tr>
+              <tr><td>Protected Remote Access</td><td>${state.data.isRemoteAccessSecure ? '<span class="status-badge badge-pass">Protected</span>' : (isNonCritical ? '<span class="status-badge badge-warn">Exposed</span>' : '<span class="status-badge badge-fail">Exposed</span>')}</td></tr>
+              <tr><td>Audit Trail / Activity Logs</td><td>${state.data.hasActivityLogs ? '<span class="status-badge badge-pass">Available</span>' : '<span class="status-badge badge-soft">Missing</span>'}</td></tr>
+              <tr><td>Written SLA in Contract</td><td>${state.data.contractHasSla ? '<span class="status-badge badge-pass">In Contract</span>' : (isNonCritical ? '<span class="status-badge badge-soft">No SLA</span>' : '<span class="status-badge badge-fail">Missing</span>')}</td></tr>
+              <tr><td>Termination & Access Revocation Terms</td><td>${state.data.contractHasTerminationTerms ? '<span class="status-badge badge-pass">Defined</span>' : (isNonCritical ? '<span class="status-badge badge-soft">Undefined</span>' : '<span class="status-badge badge-fail">Undefined</span>')}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      wizardContent.innerHTML = template;
+
+      document.getElementById('eval-date-input').addEventListener('input', (e) => {
+        state.data.evaluationDate = e.target.value;
+        persistData();
+      });
+
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Print / Save Report (PDF)';
+    }
+  </script>
+</body>
+</html>
