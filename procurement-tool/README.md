@@ -2,6 +2,8 @@
 
 A lightweight, browser-based intake assistant designed for small, resource-constrained municipal utilities and cooperatives to evaluate software tools and vendor risks before procurement.
 
+The tool and questions have been developed in cooperation by Taneli Kukonlehto (UTU) and Lauri Anttila (JYU).
+
 ---
 
 ## Overview
