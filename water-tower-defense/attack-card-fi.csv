@@ -1,0 +1,83 @@
+﻿Type;Title;Description
+Fyysinen;Suljettu venttiili;Tunkeilija katkaisee vedentulon manuaalisesti kääntämällä venttiiliä
+Fyysinen;Toimitusketjuongelma;Laitokselle toimitettavia kemikaaleja ei voida toimittaa kuljetusliikkeen ongelman vuoksi
+Fyysinen;Sähkökatko;Sähkönjakelu pumppaamolle keskeytyy
+Fyysinen;Varavoimakone rikottu;Pumppaamon varavoima ei ole saatavilla
+Fyysinen;Vedenotto keskeytetty;Pintaveden ottaminen estetty tukkimalla putki
+Fyysinen;Varaosavarkaus;Erittäin tärkeitä varaosia on varastettu
+Fyysinen;Kemikaalitankkien sabotaasi;Tankkeihin on porattu reikiä ja puhdistuskemikaalit vuotavat maahan
+Fyysinen;GPS-häirintä;Uusien putkien dokumentointi ei onnistu tarkasti, koska GPS-sijainti on väärä
+Fyysinen;Sisäpiiriläinen;Tyytymätön työntekijä manipuloi venttiilejä
+Fyysinen;Veden kontaminointi;Puhtaan veden säiliöön kaadetaan bakteereja droonista
+Fyysinen;Pohjaveden saatuminen;Myrkyllisiä kemikaaleja on kaadettu maastoon ja niitä päätyy pohjaveteen
+Fyysinen;Palopostipaniikki;Useita paloposteja avataan ympäri kaupunkia, aiheuttaen painevaihteluita
+Fyysinen;Internetkatkos;Toimipisteiden internet ei toimi
+Fyysinen;Lukkojen sabotaasi;Lukkoihin on kaadettu liimaa, eikä tiloihin pääse sisään
+Fyysinen;Droonihavainto;Laitoksen alueella on havaittu kameradrooni
+Fyysinen;Kulkukortin varkaus;Työntekijän sähköinen kulkukortti on hävinnyt
+Fyysinen;Polttoainevarkaus;Varageneraattorista ja/tai ajoneuvoista on imetty polttoaine kokonaan pois
+Fyysinen;Kaasuisku;Ilmanvaihdon kautta levitetään tainnuttavaa kaasua
+Fyysinen;Autojen sbaotointi;Laitoksen käyttämistä autoista on rikottu jarruletkut eikä niilä voi ajaa
+Fyysinen;Kameravalvonnan estäminen;Pumppaamon kameroiden linsit maalataan spray-maalilla
+Fyysinen;Väärät merkinnät;Kemikaalien merkinnät on korvattu väärillä tarroilla, jolloin ne voidaan sekoittaa keskenään
+Fyysinen;Asiakirjavarkaus;Toimitiloista varastetaan tärkeitä dokumentteja, kuten verkostokartat
+Fyysinen;Metsäpalo;Pumppaamon/puhdistamon lähellä syttyy metsäpalo
+Fyysinen;Vesitornimurto;Ulkopuolinen on murtautunut vesitorniin ja mahdollisesti tehnyt siellä jotain
+Fyysinen;Outo laite;Pumppaamolta löytyy outo laite, joka on kytketty laitoksen verkkoon
+Fyysinen;Paikallinen nuoriso;Joukko paikkakuntalaisia nuoria on käynyt rikkomassa laitoksen omaisuutta
+Kyber;Prosessin manipulointi;Ulkoinen hyökkääjä onnistuu muuttamaan puhdistamon asetuksia ja kemikaalien määriä
+Kyber;Kiristyshaittaohjelma;Tietokoneiden ruudut pimenevät ja ruudulla näkyy vain viesti joka kehottaa maksamaan lunnaita
+Kyber;Väärät lukemat;Etävalvonta näyttää, että kaikki on hyvin, vaikka oikeasti prosessissa on ongelmia
+Kyber;Vakiosalasana;Hakkeri pääsee järjestelmään, koska salasanaa ei ole koskaan vaihdettu
+Kyber;Palvelunestohyökkäys;Laitoksen www-sivuille ei pääse / ne ovat kaatuneet
+Kyber;Tietojenkalastelu;Työntekijöille lähetetään sähköpostia, jossa pyydetään kirjautumaan Syken sivuille
+Kyber;Alihankkijan moka;Laitoksen alihankkijan käyttäjätunnukset päätyvät vääriin käsiin tietomurrossa
+Kyber;Epäilyttävä päivitys;Ohjelmisto- päivityksen yhteydessä järjestelmään asentuu virus
+Kyber;Tietomurto;Asiakkaiden henkilötietoja päätyy saataville internetiin
+Kyber;Välikäsi;Etävalvonta- järjestelmästä tuleva tieto muutetaan matkalla virheelliseksi
+Kyber;Väärä hälytys;Järjestelmästä muodostuu tuhansia hälytyksiä, vaikka kaikki tuntuu olevan kunnossa
+Kyber;Laitteistotuho;Pumppaamon laitteisto rikotaan korruptoimalla sen ohjelmisto etänä
+Kyber;Verkkohyppy;Hakkeri pääsee pumppaamon/puhdistamon verkkoon päästyään ensin käsiksi toimiston wifi-verkkoon
+Kyber;Pilvipalvelun kaappaus;Ulkoisen vikapalvelun toimittajan järjestelmiin on murtauduttu ja se lähettää turhia viestejä asiakkaille.
+Kyber;Historian hävittäminen;Tietokoneelle tallennetut veden laatumittausten tulokset häviävät
+Kyber;Signaalihaistelu;Laitoksen alueella on antenni, jolla voidaan siepata etävalvonnan tietoja
+Kyber;Käyttäjästä pääkäyttäjäksi;Tavallisen työntekijän tunnuksella pystyy yhtäkkiä tekemään johtajan töitä
+Kyber;Löytynyt USB-tikku;Parkkipaikalta löytyy USB-tikku, jonka omistajaa ei tiedetä
+Kyber;Kameramurto;Laitoksen valvontakameroita voi katsella internetin kautta
+Kyber;Kellojen siirto;Tietokoneiden kellonaikoja on muutettu ja ne suorittavat ajastettuja toimintoja väärään aikaan
+Kyber;Väärä ikkuna;Tietokoneen ruudulle ilmestyy käyttäjätunnus- kysely, jolla pyritään saamaan työntekijän tilin tiedot
+Kyber;Vanhentunut laite;Laitoksen vanha tietokone, jota ei ole päivitetty, joutuu hyökkäyksen kohteeksi
+Kyber;Väärät lukemat;Etävalvonnassa olevien laitteiden lähettämät tiedot saadaan väärennettyä
+Kyber;Salasanojen arvailu;Automaattinen ohjelma yrittää arvata laitoksen salasanoja valtavalla nopeudella
+Kyber;Oma verkko;Työntekijä on piilottanut oman wifi-reitittimen työpaikalle ja kytkenyt laitoksen tietokoneen siihen
+Kyber;Ilmaisohjelmistot;Laitokselle tarjotaan uutta ohjelmistoa merkittävän edulliseen hintaan
+Kyber;Laiskiainen;Laitoksen tietokoneet hidastuvat niin, ettei niillä pysty tekemään töitä
+Informaatio;Myrkytetty vesi;Sosiaalisessa mediassa leviää huhuja, että vesi on saastunut, ja painostetaan kaikkia juomaan vain pullovettä
+Informaatio;Valepomo;Internetissä leviää tekoälyn tuottama video laitoksen johtajasta, jossa tämä haukkuu veden laatua
+Informaatio;Valetekstiviestit;Asiakkaat saavat tekstiviestejä, joissa kerrotaan veden olevan saastunutta ja että asukkaiden tulisi hakeutua terveyskeskukseen
+Informaatio;Tietovuotaja;Valeprofiilit sosiaalisessa mediassa esittävät laitoksen työntekijöitä ja levittävät valheita laitoksen toiminnasta
+Informaatio;Tietovuoto ja häirintä;Asiakkaiden nimiä julkaistaan verkossa ja sanotaan että ne on saatu murtautumalla laitoksen järjestelmiin
+Informaatio;Hakutulosmainonta;Jos laitoksen nimellä etsii tietoa netistä, tulee ensimmäisinä tuloksina valeuutisia tai tietojenkalastelu- sivuja
+Informaatio;Valeviranomainen;Viranomaisen yhteydenotolta vaikuttava viesti vaatii laitosta keskeyttämään vedenjakelun välittömästi
+Informaatio;Puhelinhäirintä;Laitoksen puhelimiin kohdistuu nauhoitettujen robottipuheluiden tulva, joka estää muut yhteydenotot
+Informaatio;Väärät kartat;Verkkoon leviää karttakuvia, joissa esitetään viemärivuodosta aiheutuneita luontotuhoja
+Informaatio;Salaliittoteoria;Suunnitellun jakelukeskeytyksen huhutaan liittyvän NATOn tunneleiden kaivamiseen
+Informaatio;Hintapaine;Verkossa leviää huhu, että veden hintaa ollaan nopeasti nostamassa jopa satoja prosentteja
+Informaatio;Karttavuoto;Verkostokarttoja julkaistaan internetissä ja kehotetaan iskemään kriittiisin kohtiin
+Informaatio;Valeasiantuntija;Palkattu näyttelijä esiintyy uutisissa asiantuntijana ja kyseenalaistaa veden laadun
+Informaatio;Addressi;Mobiilipelien yhteydessä näkyy mainoksia, joissa kehotetaan allekirjoittamaan addressi laitosta vastaan
+Informaatio;Puskaradio;Paikallisessa sosiaalisen median kanavassa levitetään huhuja laitoksesta
+Informaatio;Aiheettomat laskut;Asiakkaat saavat kirjeenä vesilaskuja, jotka eivät ole laitoksen lähettämiä
+Informaatio;Radioaallot;Paikallisradion taajuudella tulee yhtäkkiä vaaratiedote liittyen veden laatuun
+Informaatio;Laatuongelma;Laitos saa veden laatuun liittyviä ilmoituksia, jotka ovat tekoälyn luomia
+Informaatio;Valemainokset;Sosiaalisessa mediassa levitetään väärää tietoa, että hanavesi aiheuttaa kehityshäiriöitä lapsille
+Informaatio;Vesipula;Verkossa leviää huhu, että vesi on loppumassa ja se aiheuttaa hamstrausta
+Informaatio;Heikko kyberturva;Väärennetty raportti leviää verkossa, jossa sanotaan ettei laitos ole huolehtinut tietoturvasta millään tasolla
+Informaatio;Ulosmarssi;Julkisuuteen leviää tietoa, että kaikki laitoksen työntekijät ovat irtisanoutuneet protestina. Kukaan ei hoida laitosta.
+Informaatio;Korruptiota;Netissä leviää väärennettyjä sähköposteja, joissa väitetään laitoksen varoja käytetyn henkilökohtaisiin hankintoihin
+Informaatio;Wikipedianäkyvyys;Laitokselle on luotu Wikipedia-sivu, jossa esitellään virheellisiä väittämiä
+Informaatio;Valeasiakaspalvelu;Laitoksen www-sivuilta näyttävä palvelu yrittää kerätä asiakkaiden tietoja
+Informaatio;Henkilöstön häirintä;Työntekijöiden henkilökohtaisia tietoja jaellaan internetissä
+Informaatio;Ekoterroristit(?);Vesiputkelle on aiheutettu vahinkoa ja paikalle jätetään viesti että tekijä oli ympäristöaktivistien ryhmä
+;AI täh?;"Tekoälyavustaja on saatu ""myrkytettyä"" ja se tarjoaa väärää tietoa laitoksen hoidosta"
+;Fake news;Tekoälyllä on luotu kuva, jossa säiliörekka on kaatunut kunnan alueella

@@ -1,0 +1,41 @@
+Type;Title;Description
+Fyysinen;Nopean toiminnan joukot;Verkoston viat voidaan korjata nopeasti henkilöstön omassa hallussa olevien varaosien turvin
+Fyysinen;Fyysinen koventaminen;Laitoksen tiloihin pääsyä rajataan lukoin, aidoin, ja muin keinoin
+Fyysinen;Varavesi;"Laitoksella on kyky toimittaa vettä nopeasti omista säiliöistä, jos runkolinja ""kuivuu"""
+Fyysinen;Drooniapu;Hankalassa ympäristössä voidaan käyttää drooneja vian tai häiriön aiheuttajien paikantamiseen
+Fyysinen;Varavoima;Kriittisimmät toiminnot järjestyvät akuston tai varavoiman avulla
+Fyysinen;Vanhaan tapaan;Laitoksen henkilöstö ja varallaolijat voivat ohjata laitosta manuaalisesti
+Fyysinen;Lukitukset;Tärkeisiin venttiileihin on asennettu lukot, jotka voidaan avata vain erikoisavaimella
+Fyysinen;Varaputkistot;Vettä voidaan ohjata verkostoon useammasta, kuin yhdestä putkesta
+Fyysinen;Varahenkilöpalvelu;Eri alihankkijoille on olemassa ennakkoon kartoitettuja varatoimijoita, joilta pyytää apua
+Fyysinen;Liiketunnistimet;Asiattomasta toiminnasta muodostuu hälytyksiä henkilöstölle tai vartiointiliikkeelle
+Kyber;Käsikäytölle siirto;Automaatio kytketään pois päältä, kunnes hyökkääjä on varmasti pois järjestelmistä
+Kyber;Irti verkosta;Automaatio- järjestelmät on kytketty täysin irti internetistä ja toimistoverkosta
+Kyber;Varmuuskopioiden palautus;Järjestelmistä on olemassa tuoreet varmuuskopiot ja niiden palauttamista on harjoiteltu
+Kyber;Monivaiheinen kirjautuminen;Salasanojen lisäksi vaaditaan esimerkiksi kertakäyttökoodin antamista
+Kyber;Verkkosegmentointi;Automaatio- järjestelmät erotetaan selvästi muista laitoksen tai kunnan tietoverkoista
+Kyber;Kyberharjoitukset;Henkilöstö harjoittelee tasaisin väliajoin tunnistamaan mm. tietojenkalastelua
+Kyber;Uusimmat versiot;Järjestelmiin asennetaan tietoturvapäivityksiä aina, kun niitä on tarjolla
+Kyber;Salatut taajuudet;Radioliikenteessä käytetään vain salattuja yhteyksiä
+Kyber;Etäkäyttö fiksusti;Etäkäyttö- mahdollisuus on rajattu ainoastaan tiettyihin laitteisiin tai verkkoihin
+Kyber;Ammattilaiset;Ulkoinen kyberturvatoimija analysoi laitoksen järjestelmät mahdollisen hyökkäyksen vahvistamiseksi
+Informaatio;Viralliset kanavat;Tietoa jaetaan ennakkoon asiakkaille kerrotuissa, virallisissa kanavissa
+Informaatio;Varma palvelu;Tekstiviestit lähetetään asiakkaille tunnetusta numerosta, joka ei herätä epäilyksiä
+Informaatio;Totuuskampanja;Laitoksen päivittäisestä toiminnasta kerrotaan avoimesti paikallismediassa
+Informaatio;Laajennettu viestintäryhmä;Laitoksen henkilöstö saa tukea kunnan työntekijöiltä, jotka vastaavat asiakkaiden kyselyihin
+Informaatio;Vesihuolto Live;Verkkosivuilla julkaistaan reaaliajassa tietoa ongelman selvittämisestä
+Informaatio;Paikalliset influensserit;Arvostetut paikalliset henkilöt voivat välittää oikeaa tietoa verkostoissaan
+Informaatio;Lehdistötiedotteet;Tiedotepohjia käyttämällä tiedotteita voidaan toimittaa nopeasti eri tahoille
+Informaatio;Tietosuojapalvelut;Henkilöstölle ja asiakkaille tarjotaan turvapalveluita, joilla rajoitetaan tietojen väärinkäyttöä
+Informaatio;Oikeustoimet;Tekijä(t) haastetaan näyttävästi oikeuteen
+;Ulkoinen apu;Soitto terveysviranomaisille ja pyydetään julkaisemaan tidote
+;Kilauta kaverille;Soitto alueen asiakkaille ja kysytään veden laadusta
+;Sähköinen lasku;Ohjataan asiakkaita sähköisten laskujen käyttöön
+;Korjataan vain;Käydään vääntämässä venttiili takaisin auki
+;Osuustoiminta;Veden hintaa käsitellään osuuskunnan kokouksissa, johon kaikilla pääsy
+;Vain minimi;Asiakkaista säilytetään ainoastaan laskutuksen kannalta pakolliset tiedot
+;Valioluokka;Laitos huolehtii maineestaan jatkuvasti, vähentäen epäilyksiä
+;Someen;Tilanteeseen liittyvää tiedotusta viedään paikallisiin some-ryhmiin
+;Radioaallot;Tietoa toimitetaan paikallisradiolle, joka voi kertoa sitä eteenpäin
+;Protokolla;Sovittu selkeät säännöt keneltä voidaan ottaa vastaan pyyntöjä sekä miten pyynnöt vahvistetaan
+;Varmaan talteen;Laitoksen tärkeistä dokumenteista on varmuuskopiot muulla, kuin tietokoneen levyllä
