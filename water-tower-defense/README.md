@@ -8,7 +8,7 @@
 
 ## What's in the Toolkit?
 
-1. **Sociotechnical Mapping Canvas:** A large printable sheet for mapping your team, external contractors, physical equipment (pumps, booster stations), and digital tools (cloud platforms, SCADA, remote access).
+1. **Sociotechnical Mapping Canvas:** A large printable sheet for mapping your team, external contractors, physical equipment (pumps, booster stations), and digital tools (cloud platforms, SCADA, remote access). [See another repository folder for the canvas](https://github.com/laurianttila/water-utility-toolkit/tree/main/canvases)
 2. **Game Canvas:** A shared tabletop board where players build incident scenarios and plan responses.
 3. **Attack Deck (60 Cards):** Divided evenly across three domains:
    * **Cyber (20 cards):** e.g., ransomware, cloud outages, compromised remote access.
