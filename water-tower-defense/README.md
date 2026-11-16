@@ -25,7 +25,7 @@
 * **Time:** ~90–120 minutes (30 minutes for mapping + 15–20 minutes per gameplay round)
 * **Materials:** Printed canvases, printed card decks, pens, and sticky notes
 
-### Phase 1: Map Your System (30 Minutes)
+### Phase 1: Map Your System (30 Minutes or more if needed)
 Before playing any cards, gather around the **Sociotechnical Mapping Canvas**. Use sticky notes to map out:
 * **Who** runs and supports the utility (internal staff, maintenance contractors, IT/OT vendors, bulk-water suppliers).
 * **What** physical and digital assets keep water flowing (intake wells, booster pumps, PLCs, cloud services).
