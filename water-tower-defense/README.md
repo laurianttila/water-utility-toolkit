@@ -67,4 +67,5 @@ You don't need special software to adapt the game to your utility:
 This work is licensed under a [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share, print, translate, and adapt the materials for your own workshops.
 
 If you use or adapt this toolkit in research or training, please cite:
-> Anttila, L. (2026). *Water Tower Defense: A Serious Game for Supporting Frontline Autonomy Against Hybrid Threats in Small Water Utilities*. In Proceedings of the 3rd International Conference on Digital Sovereignty (ICDS 2026) (to be updated).
+> Anttila, L. (2026). *Water Tower Defense: A Serious Game for Supporting Frontline Autonomy Against Hybrid Threats in Small Water Utilities*. In Proceedings of the 3rd International Conference on Digital Sovereignty (ICDS 2026).
+(to be updated with proper Springer citation when available)
