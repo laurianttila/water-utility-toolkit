@@ -1,0 +1,41 @@
+Type;Title;Description
+Physical;Rapid Response Crew;Network faults can be repaired quickly using spare parts held directly by utility staff
+Physical;Physical Hardening;Access to facility premises is restricted with locks, fences, and other physical barriers
+Physical;Backup Water Supply;"The utility can quickly supply water from its own storage tanks if the main pipeline ""runs dry"""
+Physical;Drone Assistance;Drones can be used in difficult terrain to locate the source of a fault or disruption
+Physical;Backup Power;Critical operations are maintained using battery banks or backup generators
+Physical;Back to Basics;Facility staff and on-call personnel can operate the plant manually
+Physical;Valve Locks;Critical valves are fitted with locks that can only be opened with a specialized key
+Physical;Redundant Pipelines;Water can be routed into the distribution network through more than one pipeline
+Physical;Backup Contractors;Pre-mapped alternative contractors are available to step in for key subcontractors
+Physical;Motion Detectors;Unauthorized activity triggers alerts to utility staff or a security company
+Cyber;Switch to Manual Mode;Automation is switched off until the attacker has been confirmed out of the systems
+Cyber;Air-Gapped Systems;Automation systems are completely disconnected from the internet and office network
+Cyber;Backup Restoration;Up-to-date system backups exist and restoring from them has been practiced
+Cyber;Multi-Factor Authentication;In addition to passwords, a second verification step such as a one-time code is required
+Cyber;Network Segmentation;Automation systems are clearly separated from other utility or municipal IT networks
+Cyber;Cyber Drills;Staff regularly practice recognizing threats such as phishing attacks
+Cyber;Latest Updates;Security patches and updates are installed on systems as soon as they become available
+Cyber;Encrypted Frequencies;Only encrypted connections are used for radio communications
+Cyber;Smart Remote Access;Remote access is restricted strictly to specific approved devices or networks
+Cyber;External Specialists;An external cybersecurity provider analyzes the utility's systems to confirm a suspected attack
+Information;Official Channels;Information is shared through official channels communicated to customers in advance
+Information;Trusted SMS Sender;Text messages are sent to customers from a recognized number that does not raise suspicion
+Information;Transparency Campaign;Daily utility operations are communicated openly through local media
+Information;Extended Comms Team;Utility staff receive support from municipal employees to answer customer inquiries
+Information;Water Utility Live;Real-time updates on incident resolution are published on the utility's website
+Information;Local Influencers;Respected local figures help share verified information within their community networks
+Information;Press Releases;Pre-made templates allow press releases to be distributed quickly to relevant stakeholders
+Information;Identity Protection;Security services are offered to staff and customers to limit misuse of personal data
+Information;Legal Action;Perpetrator(s) are visibly prosecuted in court
+;External Support;Call health authorities and ask them to publish an official public notice
+;Phone a Friend;Call local customers in the area to check on tap water quality
+;E-Invoicing;Encourage customers to switch to electronic invoicing
+;Just Fix It;Go on-site and manually turn the valve back open
+;Cooperative Governance;Water pricing is addressed openly in cooperative meetings accessible to all members
+;Data Minimization;Only customer data strictly required for billing is stored
+;Top Reputation;The utility continuously maintains its public reputation, reducing suspicion during rumors
+;Local Social Media;Situational updates are posted directly into local social media groups
+;Local Radio;Information is provided to local radio stations to broadcast to the community
+;Verification Protocol;Clear rules are agreed upon regarding who can submit requests and how those requests are verified
+;Offline Backups;Important utility documents are backed up outside of computer hard drives
